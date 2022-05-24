@@ -1,5 +1,11 @@
 from flask import Flask
+from app.views.main import main
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.debug = 0
+    app.secret_key = b'sheeeeeeeeeesh'
 
-app.debug = True
+    app.register_blueprint(main)
+
+    return app
