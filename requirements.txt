@@ -28,5 +28,6 @@ SQLAlchemy==1.4.36
 starlette==0.19.1
 typing_extensions==4.2.0
 uvicorn==0.17.6
+waitress==2.1.2
 Werkzeug==2.1.2
 zipp==3.8.0

@@ -1,7 +1,7 @@
 from unicodedata import name
 from sqlalchemy import Column, String, Integer
 
-from pr.app.database import Base
+from app.database import Base
 
 
 class User(Base):

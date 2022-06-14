@@ -1,5 +1,5 @@
 from flask import Flask
-from pr.app.views.main import main
+from app.views.main import main
 
 def create_app():
     app = Flask(__name__)
