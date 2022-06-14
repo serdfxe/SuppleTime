@@ -1,17 +1,23 @@
-from app.database.repository import Repository
+from pr.app.database.repository import Repository
+from pr.app.models.user import User
+from pr.app.database.exceptions import NotFoundException
+import sqlalchemy
 
 
 class UserRepository(Repository):
-    def get(self):
-        pass
+    def get(self, id: int):
+        try:
+            return self.session.query(User).filter_by(id=id).one()
+        except sqlalchemy.exc.NoResultFound as exc:
+            raise NotFoundException(exc)
 
 
     def list(self):
-        pass
+        return self.session.query(User).all()
 
 
     def save(self, obj):
-        pass
+        self.session.add(obj)
 
 
     def update(self, obj):

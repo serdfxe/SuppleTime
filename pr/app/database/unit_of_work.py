@@ -18,13 +18,14 @@ class UnitOfWork(ABC):
     def commit(self):
         pass
 
-    def __next__(self):
+    def __enter__(self):
         self.begin()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is not None:
             self.rollback()
+        self.session.close()
 
 
 class AlchemyUnitOfWork(UnitOfWork):

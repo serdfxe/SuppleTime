@@ -6,7 +6,7 @@ class Repository(ABC):
         self.session = session
 
     @abstractmethod
-    def get(self):
+    def get(self, id: int):
         pass
 
     @abstractmethod

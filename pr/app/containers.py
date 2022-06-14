@@ -1,15 +1,15 @@
 from dependency_injector.containers import DeclarativeContainer, WiringConfiguration
 from dependency_injector.providers import Factory
 
-from app.database.unit_of_work import AlchemyUnitOfWork
-from app.models.repository import UserRepository
-from app.database.session import Session
+from pr.app.database.unit_of_work import AlchemyUnitOfWork
+from pr.app.models.repository import UserRepository
+from pr.app.database.session import Session
 
 
 class Container(DeclarativeContainer):
     wiring_config = WiringConfiguration(
         packages=[
-            "app.models",
+            "pr.app.models",
         ]
     )
 
@@ -19,7 +19,7 @@ class Container(DeclarativeContainer):
 
     users_repository = Factory(
         UserRepository,
-        session=session_creator
+        session=session_creator,
     )
 
     user_uow = Factory(
