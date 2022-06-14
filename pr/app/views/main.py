@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from SuppleTime.pr.app.config import *
-from SuppleTime.pr.app.models import *
+from pr.app.config import *
+from pr.app.models import *
 
 
 main = Blueprint("main", __name__)
