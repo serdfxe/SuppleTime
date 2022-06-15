@@ -20,3 +20,4 @@ class Repository(ABC):
     @abstractmethod
     def update(self, obj):
         pass
+    
