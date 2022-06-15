@@ -1,9 +1,7 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from SuppleTime.pr.app.config import *
 from SuppleTime.pr.app.containers import Container
-from SuppleTime.pr.app.models import *
-
-from SuppleTime.pr.app.models.services import *
+from SuppleTime.pr.app.models.user.services import *
 
 
 main = Blueprint("main", __name__)
@@ -24,10 +22,11 @@ def get_all_users_route():
 
 @main.route("/user/<id>", methods=('GET', 'POST'))
 def get_user_route(id):
-    print("yeeees")
-    return get_user(id=int(id)).name
+    user = get_user(id=int(id)) 
+    return user.name if user is not None else "No such user"
 
 
-@main.route("/create", methods=('GET', 'POST'))
+@main.route("/create_user", methods=('POST'))
 def create_user_route():
-    pass
+    data = request.form
+    return str(data.items)
