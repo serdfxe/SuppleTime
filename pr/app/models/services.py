@@ -1,10 +1,10 @@
 from dependency_injector.wiring import inject, Provide
-from pr.app.containers import Container
+from SuppleTime.pr.app.containers import Container
 
-from pr.app.database.unit_of_work import UnitOfWork
-from pr.app.database.repository import Repository
-from pr.app.database.exceptions import NotFoundException
-from pr.app.models.user import User
+from SuppleTime.pr.app.database.unit_of_work import UnitOfWork
+from SuppleTime.pr.app.database.repository import Repository
+from SuppleTime.pr.app.database.exceptions import NotFoundException
+from SuppleTime.pr.app.models.user import User
 
 
 @inject

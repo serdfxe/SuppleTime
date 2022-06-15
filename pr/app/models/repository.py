@@ -1,6 +1,6 @@
-from pr.app.database.repository import Repository
-from pr.app.models.user import User
-from pr.app.database.exceptions import NotFoundException
+from SuppleTime.pr.app.database.repository import Repository
+from SuppleTime.pr.app.models.user import User
+from SuppleTime.pr.app.database.exceptions import NotFoundException
 import sqlalchemy
 
 
