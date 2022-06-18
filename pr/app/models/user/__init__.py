@@ -21,4 +21,4 @@ class ConfirmUser(Base):
     token = Column(String(120), primary_key=True)
     password_hash = Column(String())
 
-    # users = relationship("User", back_populates="confirm_users")
+    users = relationship("User", back_populates="confirm_users")
