@@ -11,8 +11,8 @@ print(get_user(1))
 #print(create_user("Tolya ga1y", "mail@nai1l.com"))
 
 
-@main.route("/", methods=['GET', 'POST'])
-def root_page_route():
+@main.route("/main/<s>", methods=['GET', 'POST'])
+def root_page_route(s):
     return render_template("main.html", sidebar_components=sidebar_components, current=s, url_for_sidebar_components=url_for_sidebar_components, content=content[s])
 
 

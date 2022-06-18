@@ -31,7 +31,6 @@ body {
 
 .content {
     z-index: 2;
-    height: fit-content;
     min-height: 100%;
     width:100%;
     margin-left: 50px;
@@ -122,4 +121,8 @@ body {
 
 .sidebar .current a {   
     color: var(--highlight-text-color);
+}
+
+.content img {
+    width: -webkit-fill-available;
 }

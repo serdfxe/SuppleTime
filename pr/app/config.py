@@ -25,6 +25,6 @@ content = {
     "work": "https://memepedia.ru/wp-content/uploads/2019/06/stonks-template.png",
     "schedule": "https://s10.stc.yc.kpcdn.net/share/i/12/11065821/wr-960.webp", 
     "teams": "http://risovach.ru/upload/2016/03/mem/nelzya-prosto-tak-vzyat-i-boromir-mem_109594771_orig_.jpg", 
-    "settings": "http://memesmix.net/media/created/9ckuvk.jpg", 
+    "settings": "https://www.meme-arsenal.com/memes/b294fe2e35afa11184389f572480661e.jpg", 
     "account": "https://www.meme-arsenal.com/memes/997b08a8d833988619ef9e6cea4233d0.jpg"
 }
