@@ -10,9 +10,10 @@ container = Container()
 print(get_user(1))
 #print(create_user("Tolya ga1y", "mail@nai1l.com"))
 
+
 @main.route("/", methods=['GET', 'POST'])
 def root_page_route():
-    return render_template('eror.html')
+    return render_template("main.html", sidebar_components=sidebar_components, current=s, url_for_sidebar_components=url_for_sidebar_components, content=content[s])
 
 
 @main.route("/users", methods=('GET', 'POST'))
@@ -35,7 +36,15 @@ def create_user_route():
         return """<p> Hello, try post smth </p> <form class="form-test" method="post">
                 <p>Name:</p>
 	            <input type="text" value="" name="name">
-                <p>Email:</p>qq
+                <p>Email:</p>
                 <input type="text" value="" name="email">
-	            Пример  <input type="submit" value="ссылки">
+                <p>Пароль:</p>
+                <input type="text" value="" name="password">
+	            <input type="submit" value="Register">
                 </form>"""
+
+
+@main.route("/del", methods=('POST', 'GET'))
+def delete_all_users_route():
+    delete_all_users()
+    return "OK"

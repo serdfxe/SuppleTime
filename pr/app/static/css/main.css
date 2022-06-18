@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+
+:root {
+    --dark-dominant-color: #101727;
+    --light-dominant-color: #F9F5F5;
+    --complement-color: #9B9CA6;
+    --accent-color: #7780FF;
+    --highlight-color: #222331;
+    --highlight-text-color: #EEF0FF;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-start;
+    background-color: var(--dark-dominant-color);
+}
+
+
+.sidebar {
+    height: 100%;
+    background-color: var(--dark-dominant-color);
+    width: 50px;
+    transition: 0.5s;
+    margin-top: 0px;
+    position: fixed;
+    z-index: 1;
+}
+
+.content {
+    z-index: 2;
+    height: fit-content;
+    min-height: 100%;
+    width:100%;
+    margin-left: 50px;
+    transition: 0.5s;
+    background-color: var(--light-dominant-color);
+}
+
+@keyframes content_anim {
+    from,
+    to {
+        margin-left: 230px;
+    }
+}
+
+.sidebar .logos {
+    display: flex;
+}
+
+.sidebar .logos .minilogo {
+    margin: 15px 0px 0px 11px;
+    height: 40px;
+    transition: 0.5s;
+}
+
+.sidebar .logos .logo {
+    margin: 18px 20px 0px 70px;
+    transition: 0.5s;
+}
+
+.sidebar:hover {
+    width: 230px;
+}
+
+.content:hover .sidebar{
+    width: 50px;
+}
+
+.sidebar:hover .minilogo {
+    margin-left: -50px;
+}
+
+.sidebar:hover .logo {
+    margin-left: 40px;
+}
+
+ 
+/* .sidebar:hover {
+    width: 230px;
+}
+
+.sidebar:hover .minilogo {
+    margin-left: -50px;
+}
+
+.sidebar:hover .logo {
+    margin-left: 40px;
+} */
+
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    flex-direction: column;
+    z-index: 1;
+    position: relative;
+}
+
+.sidebar li {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar li img {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sidebar li a {
+    text-decoration: none;
+    color: var(--complement-color);
+    font-size: 17px;
+}
+
+.sidebar .current {
+    background-color: var(--accent-color);
+}
+
+.sidebar .current a {   
+    color: var(--highlight-text-color);
+}
