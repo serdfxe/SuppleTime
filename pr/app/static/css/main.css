@@ -15,7 +15,7 @@ body {
     margin: 0;
     padding: 0;
     justify-content: flex-start;
-    background-color: var(--dark-dominant-color);
+    background-color: var(--light-dominant-color);
 }
 
 
@@ -125,4 +125,5 @@ body {
 
 .content img {
     width: -webkit-fill-available;
+    padding: 10px;
 }
