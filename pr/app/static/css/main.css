@@ -7,6 +7,8 @@
     --accent-color: #7780FF;
     --highlight-color: #222331;
     --highlight-text-color: #EEF0FF;
+    --h2: #9D9D9D;
+    --h1: #FEFEFE;
 }
 
 body {
@@ -15,7 +17,7 @@ body {
     margin: 0;
     padding: 0;
     justify-content: flex-start;
-    background-color: var(--light-dominant-color);
+    background-color: var(--dark-dominant-color);
 }
 
 
@@ -31,6 +33,7 @@ body {
 
 .content {
     z-index: 2;
+    height: fit-content;
     min-height: 100%;
     width:100%;
     margin-left: 50px;
@@ -121,9 +124,4 @@ body {
 
 .sidebar .current a {   
     color: var(--highlight-text-color);
-}
-
-.content img {
-    width: -webkit-fill-available;
-    padding: 10px;
 }
