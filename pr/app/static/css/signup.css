@@ -10,6 +10,7 @@
     --highlight-text-color: #EEF0FF;
     --h2: #9D9D9D;
     --h1: #FEFEFE;
+    --eror-color: #FB4952;
     zoom: 1;
 }
 
@@ -262,4 +263,8 @@ h3 {
     text-align: center;
     text-indent: 10px;
     margin-bottom: 32px;
+}
+
+.eror {
+    color: var(--eror-color);
 }

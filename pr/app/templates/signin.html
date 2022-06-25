@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
+  <title>Sign In</title>
+  <link rel="shortcut icon" href="{{url_for('static', filename='img/sidebar/minilogo.svg')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/signin.css')}}">
 </head>
 <body>
@@ -22,9 +23,15 @@
         <h1>
           Авторизация
         </h1>
-        <h2>
-          Введите данные для входа
-        </h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <h2 class="{{category}}"> {{ message }} </h2>
+              {% endfor %}
+            {% else %}
+              <h2>Введите данные для входа</h2>
+            {% endif %}
+          {% endwith %}
         <form method="POST" id="form">
           <h2>Почта</h2>
           <input type="text" name="email" placeholder="Введите почту...">

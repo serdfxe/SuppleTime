@@ -9,6 +9,7 @@
     --highlight-text-color: #EEF0FF;
     --h2: #9D9D9D;
     --h1: #FEFEFE;
+    --eror-color: #FB4952;
     zoom: 0.75;
 }
 
@@ -309,4 +310,8 @@ a {
     text-decoration: none;
     height: fit-content ;
     margin-bottom: 36px;
+}
+
+.eror {
+    color: var(--eror-color);
 }
