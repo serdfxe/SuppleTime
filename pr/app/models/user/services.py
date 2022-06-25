@@ -28,6 +28,11 @@ def get_user(id: int, repository: Repository = Provide[Container.users_repositor
         return None
 
 
+@inject
+def is_user_in_db(email: str, repository: Repository = Provide[Container.users_repository]):
+    return True if repository.get(email=email) else False
+
+
 def generate_token():
     return secrets.token_urlsafe()
 
@@ -44,7 +49,7 @@ def create_user(name: str, email: str, password: str, unit_of_work: UnitOfWork =
         uow.repository.save(new_user)
         uow.repository.save(new_confirm_user)
         uow.commit()
-        return "Success"
+        return True
 
 
 def is_valid_email(email: str) -> bool: 
@@ -53,25 +58,27 @@ def is_valid_email(email: str) -> bool:
 
 def is_valid_password(password: str) -> bool:
     if len(password) < 8:
-        return "Make sure your password is at lest 8 letters"
+        return "Убедитесь, что ваш пароль больше 8 символов в длину"
     elif re.search('[0-9]',password) is None:
-        return "Make sure your password has a number in it"
+        return "Убедитесь, что в вашем пароле есть цифры"
     elif re.search('[A-Z]',password) is None: 
-        return "Make sure your password has a capital letter in it"
+        return "Убедитесь, что в вашем пароле есть заглавные буквы"
     else:
         return True
 
 
 def register_user(data) -> str:
-    name = data.get("name")
+    #name = data.get("name")
     email = data.get("email")
     password = data.get("password")
-    if name is None and email is None: return "No data"
-    if name == '' or name.count(' '): return "Incorrect name"
-    if email == '' or not is_valid_email(email): return "Incorrect email"
+    if password is None or password == "" or email is None or email == "": return ("Вы ввели недостаточно данных", "error")
+    #if name == '' or name.count(' '): return "Incorrect name"
+    if email == '' or not is_valid_email(email): return ("Некорректный email","error")
     is_valid = is_valid_password(password)
-    if is_valid is not True: return is_valid
-    return create_user(name, email, password)
+    if is_valid is not True: return (is_valid, "error")
+    if is_user_in_db(email): return ("Пользователь с таким email уже существует", "error")
+    name = email.split("@")[0]
+    return ("Регистрация прошла успешно", "message") if create_user(name, email, password) else ("Произошла неизвестная ошибка: попробуйте еще раз позже", "error")
 
 
 @inject
@@ -82,3 +89,5 @@ def delete_all_users(unit_of_work: UnitOfWork = Provide[Container.user_uow]):
         uow.repository.session.query(User).delete()
         
         uow.commit()
+
+

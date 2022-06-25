@@ -10,6 +10,7 @@
     --h2: #9D9D9D;
     --h1: #FEFEFE;
     --eror-color: #FB4952;
+    --message-color: #36B879;
     zoom: 1;
 }
 
@@ -300,6 +301,10 @@ a {
     margin-bottom: 36px;
 }
 
-.eror {
+.error {
     color: var(--eror-color);
+}
+
+.message {
+    color: var(--message-color);
 }

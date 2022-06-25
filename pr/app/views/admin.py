@@ -11,7 +11,7 @@ container = Container()
 
 @admin.route("/users", methods=('GET', 'POST'))
 def get_all_users_route():
-    return str([i.name for i in get_all_users()])
+    return str([i.email for i in get_all_users()])
 
 
 @admin.route("/user/<id>", methods=('GET', 'POST'))

@@ -5,9 +5,9 @@ import sqlalchemy
 
 
 class UserRepository(Repository):
-    def get(self, id: int):
+    def get(self,**kwargs) -> User:
         try:
-            return self.session.query(User).filter_by(id=id).one()
+            return self.session.query(User).filter_by(**kwargs).first()
         except sqlalchemy.exc.NoResultFound as exc:
             raise NotFoundException(exc)
 

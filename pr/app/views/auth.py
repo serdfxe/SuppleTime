@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-
+from SuppleTime.pr.app.models.user.services import *
 
 auth = Blueprint("auth", __name__)
 
@@ -9,7 +9,8 @@ def signup_route():
     if request.method == "GET":
         return render_template("signup.html")
     if request.method == "POST":
-        flash("EROR", "eror")
+        mes = register_user(request.form)
+        flash(mes[0],mes[1])
         return render_template("signup.html")
         
         
