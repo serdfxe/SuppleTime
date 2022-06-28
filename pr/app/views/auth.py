@@ -34,6 +34,18 @@ def signin_route():
 def auth_rout():
     return redirect(url_for("auth.signin_route"))
     
+
+@auth.route("/confirmemail/<s>")
+def confirm_email_route(s):
+    user = get_nonconfirmed_user_by_token(s)
+
+    if user:
+        if create_user(user.email.split("@")[0], user.email, user.password_hash):
+            return "Success"
+        return "Little bit Not Success"
+    return "Not Success"
+        
+
     
 #@auth.route('/check_password', methods=("GET", "POST"))
 #def check_password_route():
