@@ -9,7 +9,7 @@ from SuppleTime.pr.app.database import Base
 class User(UserMixin, Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, unique=True)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     name = Column(String(120))
     email = Column(String(120), primary_key=True)
 
@@ -21,6 +21,26 @@ class ConfirmUser(Base):
 
     id = Column(Integer, ForeignKey(User.id), primary_key=True, unique=True)
     token = Column(String(120), primary_key=True)
-    password_hash = Column(String())
+    password_hash = Column(String(120))
 
     users = relationship("User", back_populates="confirm_users")
+
+
+class NonConfirmedUser(Base):
+    __tablename__ = 'non_comfirm_users'
+
+    id = Column(Integer, primary_key=True, unique=True)
+    email = Column(String(120), primary_key=True)
+    password_hash = Column(String(120))
+    confirm_token = Column(String(120), unique=True)
+
+'''
+class Anonymous(AnonymousUserMixin):
+
+    def __init__(self):
+        pass
+
+
+    def is_authenticated(self):
+        return True
+'''

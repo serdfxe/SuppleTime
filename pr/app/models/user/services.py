@@ -14,7 +14,8 @@ from SuppleTime.pr.app.database.unit_of_work import UnitOfWork
 from SuppleTime.pr.app.database.repository import Repository
 from SuppleTime.pr.app.database.exceptions import NotFoundException
 
-from SuppleTime.pr.app.models.user import User, ConfirmUser
+from SuppleTime.pr.app.models.user import User, ConfirmUser, NonConfirmedUser
+from SuppleTime.pr.app.models.Email import Email
 
 from SuppleTime.pr.app.config import salt
         
@@ -25,9 +26,33 @@ def get_all_users(repository: Repository = Provide[Container.users_repository]) 
 
 
 @inject
+def get_all_nonconfirmedusers(repository: Repository = Provide[Container.nonconfirmed_users_repository]) -> list:
+    return repository.list()
+
+
+@inject
 def get_user(id: int, repository: Repository = Provide[Container.users_repository]) -> None or User:
     try:
         return repository.get(id=id)
+    except NotFoundException as exc:
+        print("User not found: ", exc)
+        return None
+
+
+
+@inject
+def get_nonconfirmed_user_by_email(email: str, repository: Repository = Provide[Container.nonconfirmed_users_repository]) -> None or NonConfirmedUser:
+    try:
+        return repository.get(email=email)
+    except NotFoundException as exc:
+        print("User not found: ", exc)
+        return None
+
+
+@inject
+def get_nonconfirmed_user_by_token(token: str, repository: Repository = Provide[Container.nonconfirmed_users_repository]) -> None or NonConfirmedUser:
+    try:
+        return repository.get(confirm_token=token)
     except NotFoundException as exc:
         print("User not found: ", exc)
         return None
@@ -55,6 +80,7 @@ def check_password(email: str, password: str, repository: Repository = Provide[C
     #email = data.get("email")
     #password = data.get("password")
     user = repository.get(email=email)
+    if not user: return False
     password_hash_db = user.confirm_users.password_hash
     password_hash = get_password_hash(password)
     if password_hash_db == password_hash:
@@ -76,11 +102,10 @@ def login(data, repository: Repository = Provide[Container.users_repository]):
             
     
 @inject
-def create_user(name: str, email: str, password: str, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+def create_user(name: str, email: str, password_hash: str, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     with unit_of_work as uow:
-        user_id = len(get_all_users())
-        new_user = User(name=name, email=email, id=user_id)
-        new_confirm_user = ConfirmUser(id=user_id, token=generate_token(), password_hash=get_password_hash(password))
+        new_user = User(id=len(get_all_users()), name=name, email=email)
+        new_confirm_user = ConfirmUser(token=generate_token(), password_hash=password_hash, id=new_user.id)
         uow.repository.save(new_user)
         uow.repository.save(new_confirm_user)
         uow.commit()
@@ -102,6 +127,27 @@ def is_valid_password(password: str) -> bool:
         return True
 
 
+@inject
+def delete_all_users(unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+    with unit_of_work as uow:
+        #users = get_all_users()
+        uow.repository.session.query(ConfirmUser).delete()
+        uow.repository.session.query(User).delete()
+        uow.repository.session.query(NonConfirmedUser).delete()
+        
+        uow.commit()
+
+
+@inject
+def create_nonconfirmed_user(email, password, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+    with unit_of_work as uow:
+        nonconfirmeduser = NonConfirmedUser(id=len(get_all_nonconfirmedusers()) + 1, email=email, password_hash=get_password_hash(password), confirm_token=generate_token())
+        uow.repository.save(nonconfirmeduser)
+
+        uow.commit()
+        return nonconfirmeduser.confirm_token
+
+
 def register_user(data) -> str:
     email = data.get("email")
     password = data.get("password")
@@ -109,18 +155,11 @@ def register_user(data) -> str:
     if email == '' or not is_valid_email(email): return ("Incorrect email","error")#("������������ email","error")
     is_valid = is_valid_password(password)
     if is_valid is not True: return (is_valid, "error")
-    if is_user_in_db(email): return ("This email address is already taken please choose a unique one","error")#("������������ � ����� email ��� ����������", "error")
-    name = email.split("@")[0]
-    return ("Registration successful", "message") if create_user(name, email, password) else ("Unknown error, please try again later", "error")
-
-
-@inject
-def delete_all_users(unit_of_work: UnitOfWork = Provide[Container.user_uow]):
-    with unit_of_work as uow:
-        #users = get_all_users()
-        uow.repository.session.query(ConfirmUser).delete()
-        uow.repository.session.query(User).delete()
-        
-        uow.commit()
-
+    if get_nonconfirmed_user_by_email(email=email): return ("This email address is already taken please choose a unique one","error")#("������������ � ����� email ��� ����������", "error")
+    
+    confirm_token = create_nonconfirmed_user(email, password)
+    if confirm_token:
+        Email.send(email, f"suppletime.ru/confirmemail/{confirm_token}", "Email Verify")
+        return ("We send email on your email", "message") 
+    return ("Unknown error, please try again later", "error")
 

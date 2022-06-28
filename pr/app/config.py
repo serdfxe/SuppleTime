@@ -1,5 +1,8 @@
 DATABASE_URL = "postgresql+psycopg2://test:314159@127.0.0.1:5432/suppletime_db"
 
+EMAIL_PASS = "31415926535asd"
+EMAIL_ADDRES = "noreply@sheeesh.ru"
+
 salt = ""
 
 sidebar_components = {

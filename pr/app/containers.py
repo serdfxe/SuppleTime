@@ -2,7 +2,7 @@ from dependency_injector.containers import DeclarativeContainer, WiringConfigura
 from dependency_injector.providers import Factory
 
 from SuppleTime.pr.app.database.unit_of_work import AlchemyUnitOfWork
-from SuppleTime.pr.app.models.user.repository import UserRepository
+from SuppleTime.pr.app.models.user.repository import UserRepository, NonConfirmedUserRepository
 from SuppleTime.pr.app.database.session import Session
 
 
@@ -19,6 +19,11 @@ class Container(DeclarativeContainer):
 
     users_repository = Factory(
         UserRepository,
+        session=session_creator,
+    )
+
+    nonconfirmed_users_repository = Factory(
+        NonConfirmedUserRepository,
         session=session_creator,
     )
 
