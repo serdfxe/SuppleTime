@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap');
 
 :root {
     --dark-dominant-color: #101727;
@@ -47,7 +48,7 @@ body {
     padding: 0;
     background-color: var(--dark-dominant-color);
     position: fixed;
-    overflow: hidden;
+    overflow: hidden; 
     left: 0px;
     right: 0px;
     top: 0px;
@@ -83,19 +84,6 @@ canvas {
     max-width: 300px;
 }
 
-.header .headerref {
-    display: flex;
-    margin-right: 60px;  
-}
-
-.header .headerref img {
-    margin-left: 15px ;
-}
-
-.header a {
-    text-decoration: none;
-    color: var(--h1);
-}
 
 .content {
     height: 100%;
@@ -110,28 +98,18 @@ canvas {
 .content .form .topform {
     z-index: 5;
     min-width: 621px;
-    min-height: 548px;
+    min-height: 435px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 
-.content .form .bottomform {
-    margin-top: -464px;
-    z-index: 1;
-    width: 621px;
-    height: 548px;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    
-}
 
 h1 {
     padding: 0;
     margin: 0;
-    font-size: 55px;
+    font-size: 44px;
     color: var(--dark-dominant-color);
     z-index: 3;
     margin-top: 35px;
@@ -141,23 +119,38 @@ h2 {
     font-weight: 400;
     padding: 0;
     margin: 0;
-    margin-top: 38px;
+    font-size: 22px;
+    color: var(--h2);
+    z-index: 3;
+    margin-top: 32px;
+}
+
+h4 {
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
     font-size: 22px;
     color: var(--h2);
     z-index: 3;
 }
 
+
+h2 .secondpart {
+    margin-top: 100px;
+
+}
+
 form {
+    margin-top: 20px;
     z-index: 3;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 486px;
-    height: 325px;
+    height: 120px;
 }
 
 form h2 {
-    font: normal;
     padding: 0;
     margin: 0;
     margin-left: 12px;
@@ -182,98 +175,18 @@ input[type="text"]:focus {
     border: 2.21px solid var(--highlight-color);
 }
 
-input[type="password"] {
-    border: 2.21px solid var(--h2);
-    border-radius: 15px;
-    width: 486px;
-    height: 76px;
-    margin-top: 6px;
-    font-size: 28px;
-    padding-left: 12px;
-    padding-right: 12px;
-    color: var(--highlight-color);
-    background-color: var(--h1);
-}
 
-input[type="password"]:focus {
-    border: 2.21px solid var(--highlight-color);
-}
-
-label h2 {
-    font: normal;
-    margin: 0;
-    margin-left: 12px;
-}
-
-
-.check {
-    padding: 0;
-    margin-top: 21px;
-    margin-left: 20px;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-}
-
-.checkinput {
-    position: absolute;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.checkbox {
-    cursor: pointer;
-    width: 22px;
-    height: 22px;
-    padding-left: -10px;
-    overflow: hidden;
-    border-radius: 7px;
-    background-color: var(--h1);
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    border: 2.21px solid var(--h2);
-}
-
-.checkinput:checked + .checkbox {
-    background-color: var(--accent-color);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 12 12'%3E%3Cpolyline fill='none' stroke='%23fff' stroke-width='2' points='0.7193333333333333, 3.3326666666666664, 3.3333333333333335, 6.0, 7.224666666666667, 1.3333333333333333'/%3E%3C/svg%3E");;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 486px;
-}
-
-.enter__button {
-    margin-bottom: 36px;
+.button {
     font-size: 28.74px;
-    border-radius: 15px;
-    width: 238px;
-    height: 76px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--accent-color);
     color: var(--light-dominant-color);
-    cursor: pointer;
-}
-
-.code__button {
-    font-size: 28.74px;
     border-radius: 15px;
-    width: 238px;
+    width: 486px;
     height: 76px;
+    background-color: var(--accent-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--h1);
-    color: var(--h2);
-    border: 2.21px solid var(--h2);
-    height: 71.58px;
-    width: 233.58px;
+    cursor: pointer;
 }
 
 h3 {
@@ -289,32 +202,10 @@ h3 {
     margin-bottom: 32px;
 }
 
-a {
-    font-size: 23px;
-    color: var(--accent-color);
-    margin-left: 24px;
-}
-
-.buttons a {
-    text-decoration: none;
-    height: fit-content ;
-    margin-bottom: 36px;
-}
-
 .error {
     color: var(--eror-color);
 }
 
 .message {
     color: var(--message-color);
-}
-
-
-.topform {
-    background-color: var(--light-dominant-color);
-    border-radius: 34px;
-}
-
-.remembermetext {
-    width: auto;
 }

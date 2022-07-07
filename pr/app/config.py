@@ -31,3 +31,37 @@ content = {
     "settings": "https://www.meme-arsenal.com/memes/b294fe2e35afa11184389f572480661e.jpg", 
     "account": "https://www.meme-arsenal.com/memes/997b08a8d833988619ef9e6cea4233d0.jpg"
 }
+
+authforms = {
+    "passwordchange": {"title": "Смена пароля", "subtitle": "Введите новый пароль.", "form": [
+        ("first_label", "Новый пароль"),
+        ("pass_input", "password1", "Введите новый пароль..."),
+        ("label", "Подтверждение пароля"),
+        ("pass_input", "password2", "Повторно введите новый пароль..."),
+        ("submit", "Сменить пароль")]},
+
+    "enterbymail": {"title": "Вход по ссылке", 'subtitle': "Введите Вашу почту. На неё прийдёт ссылка для входа.", "form": [
+        ("text_input", "email", "Введите почту..."), 
+        ("submit", "Отослать ссылку")]},
+
+    "signup": {"title": "Регистрация", "subtitle": "Введите данные для регистрации.", "form": [
+        ("first_label", "Почта"),
+        ("text_input", "email", "Введите почту..."),
+        ("label", "Пароль"),
+        ("pass_input", "password", "Введите пароль..."),
+        ("submit", "Зарегистрироваться")]},
+
+    "signin": {"title": "Авторизация", "subtitle": "Введите данные для входа.", "form": [
+        ("first_label", "Почта"),
+        ("text_input", "email", "Введите почту..."),
+        ("label", "Пароль"),
+        ("pass_input", "password", "Введите пароль..."),
+        ("check_box", "rememberme", "Запомнить при следующем входе?"),
+        ("ref", "forgotpassword", "Забыли пароль?"),
+        ("two_btn", (("submit_btn", "Войти"), ("redirect_btn", "Войти по почте", "enterbymail")))]},
+    
+    "forgotpassword": {"title": "Забыли пароль?", "subtitle": "Введите Вашу почту. На неё прийдёт ссылка для смены пароля.", "form": [
+        ("first_label", "Почта"),
+        ("text_input", "email", "Введите почту..."),
+        ("submit", "Отправить письмо")]},
+}

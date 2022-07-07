@@ -58,14 +58,22 @@ def get_nonconfirmed_user_by_token(token: str, repository: Repository = Provide[
         return None
 
 
+@inject
+def get_confirmed_user_by_token(token: str, repository: Repository = Provide[Container.confirm_users_repository]) -> None or User:
+    try:
+        return repository.get(token=token)
+    except NotFoundException as exc:
+        pass
+
+
 @login_manager.user_loader
 def load_user(id):
     return get_user(id=id)
 
 
 @inject
-def is_user_in_db(email: str, repository: Repository = Provide[Container.users_repository]):
-    return True if repository.get(email=email) else False
+def is_user_in_db(email: str, repository: Repository = Provide[Container.users_repository]) -> User:
+    return repository.get(email=email)
 
 
 def generate_token():
@@ -87,8 +95,9 @@ def check_password(email: str, password: str, repository: Repository = Provide[C
         return True
     return False
 
+
 @inject
-def login(data, repository: Repository = Provide[Container.users_repository]):
+def login(data, just_login=False, repository: Repository = Provide[Container.users_repository]):
     email = data.get("email")
     password = data.get("password")
     user = repository.get(email=email)
@@ -109,7 +118,9 @@ def create_user(name: str, email: str, password_hash: str, unit_of_work: UnitOfW
         uow.repository.save(new_user)
         uow.repository.save(new_confirm_user)
         uow.commit()
-        return True
+        uow.repository.session.refresh(new_user)
+        uow.repository.session.expunge(new_user)
+        return new_user
 
 
 def is_valid_email(email: str) -> bool: 
@@ -125,6 +136,13 @@ def is_valid_password(password: str) -> bool:
         return "Make sure that your password contains at least one capital letter" #"���������, ��� � ����� ������ ���� ��������� �����"
     else:
         return True
+
+
+@inject
+def delete_nonconfirmed_user(id: int, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+    with unit_of_work as uow:
+        uow.repository.session.query(NonConfirmedUser).filter_by(id=id).delete()
+        uow.commit()
 
 
 @inject
@@ -159,7 +177,37 @@ def register_user(data) -> str:
     
     confirm_token = create_nonconfirmed_user(email, password)
     if confirm_token:
-        Email.send(email, f"suppletime.ru/confirmemail/{confirm_token}", "Email Verify")
+        Email.send(email, f"suppletime.ru/auth/confirmemail/{confirm_token}", "Email Verify")
         return ("We send email on your email", "message") 
     return ("Unknown error, please try again later", "error")
 
+
+def send_passwd_mail(email: str):
+    if email == '':
+        return ("Valid email", "error")
+    user = is_user_in_db(email)
+    if user:
+        Email.send(email, f"suppletime.ru/auth/passwordchange/{user.confirm_users.token}", "Password change")
+        return ("Check your email.", "message")
+
+def send_enter_mail(email: str):
+    if email == '':
+        return ("Valid email", "error")
+    user = is_user_in_db(email)
+    if user:
+        Email.send(email, f"suppletime.ru/auth/enterbymail/{user.confirm_users.token}", "Enter by mail")
+        return ("Check your email.", "message")
+
+@inject
+def change_password(user: ConfirmUser, passwd1: str, passwd2: str, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+    if passwd1 != passwd2: return ("p1 != p2", "error")
+    is_valid = is_valid_password(passwd1)
+    if not is_valid: return is_valid
+    with unit_of_work as uow:
+        user = uow.session.query(ConfirmUser).filter_by(id=user.id).first()
+        user.password_hash = get_password_hash(passwd1)
+        user.token = generate_token()
+
+        uow.commit()
+        return ("Success", "message")
+    return "ERROR", "error"
