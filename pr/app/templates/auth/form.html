@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Password Change</title>
+  <title>{{form["title"]}}</title>
   <link rel="shortcut icon" href="{{url_for('static', filename='img/sidebar/minilogo.svg')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/authform.css')}}">
 </head>
@@ -12,6 +12,12 @@
     <!--<canvas id="canvas"></canvas>-->
     <div class="header">
       <img src="{{url_for('static', filename='img/Autentification/logo.svg')}}" alt="" class="logo">
+      {% if form["ref"] %}
+        <a class="headerref" href="/auth{{form['ref'][1]}}">
+          {{form["ref"][0]}}
+          <img src="{{url_for('static', filename='img/Autentification/arrow.svg')}}" alt="">
+        </a>
+      {% endif %}
     </div>
     <div class="content">
       <div class="form">

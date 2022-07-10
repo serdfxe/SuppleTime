@@ -83,6 +83,19 @@ canvas {
     max-width: 300px;
 }
 
+.header .headerref {
+    display: flex;
+    margin-right: 60px;  
+}
+
+.header .headerref img {
+    margin-left: 15px ;
+}
+
+.header a {
+    text-decoration: none;
+    color: var(--h1);
+}
 
 .content {
     height: 100%;

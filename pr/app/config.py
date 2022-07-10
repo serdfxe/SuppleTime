@@ -7,11 +7,12 @@ salt = ""
 
 sidebar_components = {
     "Главная":"main",
+    "Трекер": "tracker",
     "Работа":"work",
     "Планы":"schedule",
     "Команды":"teams",
     "Настройки":"settings",
-    "Личный кабинет":"account"
+    "Личный кабинет":"account",
 }
 
 url_for_sidebar_components = {
@@ -20,7 +21,8 @@ url_for_sidebar_components = {
     "schedule": "statistics.svg",
     "teams": "teams.svg",
     "settings": "settings.svg",
-    "account": "account.svg"
+    "account": "account.svg",
+    "tracker": "timer.svg"
 }
 
 content = {
@@ -29,29 +31,30 @@ content = {
     "schedule": "https://s10.stc.yc.kpcdn.net/share/i/12/11065821/wr-960.webp", 
     "teams": "http://risovach.ru/upload/2016/03/mem/nelzya-prosto-tak-vzyat-i-boromir-mem_109594771_orig_.jpg", 
     "settings": "https://www.meme-arsenal.com/memes/b294fe2e35afa11184389f572480661e.jpg", 
-    "account": "https://www.meme-arsenal.com/memes/997b08a8d833988619ef9e6cea4233d0.jpg"
+    "account": "https://www.meme-arsenal.com/memes/997b08a8d833988619ef9e6cea4233d0.jpg",
+    "tracker": ""
 }
 
 authforms = {
-    "passwordchange": {"title": "Смена пароля", "subtitle": "Введите новый пароль.", "form": [
+    "passwordchange": {"title": "Смена пароля", "subtitle": "Введите новый пароль.", "ref": None, "form": [
         ("first_label", "Новый пароль"),
         ("pass_input", "password1", "Введите новый пароль..."),
         ("label", "Подтверждение пароля"),
         ("pass_input", "password2", "Повторно введите новый пароль..."),
         ("submit", "Сменить пароль")]},
 
-    "enterbymail": {"title": "Вход по ссылке", 'subtitle': "Введите Вашу почту. На неё прийдёт ссылка для входа.", "form": [
+    "enterbymail": {"title": "Вход по ссылке", 'subtitle': "Введите Вашу почту. На неё прийдёт ссылка для входа.", "ref": None, "form": [
         ("text_input", "email", "Введите почту..."), 
         ("submit", "Отослать ссылку")]},
 
-    "signup": {"title": "Регистрация", "subtitle": "Введите данные для регистрации.", "form": [
+    "signup": {"title": "Регистрация", "subtitle": "Введите данные для регистрации.", "ref": ["Уже есть аккаунт?", "/signin"], "form": [
         ("first_label", "Почта"),
         ("text_input", "email", "Введите почту..."),
         ("label", "Пароль"),
         ("pass_input", "password", "Введите пароль..."),
         ("submit", "Зарегистрироваться")]},
 
-    "signin": {"title": "Авторизация", "subtitle": "Введите данные для входа.", "form": [
+    "signin": {"title": "Авторизация", "subtitle": "Введите данные для входа.", "ref": ["Ещё нет аккаунта?", "/signup"], "form": [
         ("first_label", "Почта"),
         ("text_input", "email", "Введите почту..."),
         ("label", "Пароль"),
@@ -60,7 +63,7 @@ authforms = {
         ("ref", "forgotpassword", "Забыли пароль?"),
         ("two_btn", (("submit_btn", "Войти"), ("redirect_btn", "Войти по почте", "enterbymail")))]},
     
-    "forgotpassword": {"title": "Забыли пароль?", "subtitle": "Введите Вашу почту. На неё прийдёт ссылка для смены пароля.", "form": [
+    "forgotpassword": {"title": "Забыли пароль?", "subtitle": "Введите Вашу почту. На неё прийдёт ссылка для смены пароля.", "ref": None, "form": [
         ("first_label", "Почта"),
         ("text_input", "email", "Введите почту..."),
         ("submit", "Отправить письмо")]},

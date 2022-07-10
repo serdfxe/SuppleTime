@@ -14,6 +14,8 @@ class User(UserMixin, Base):
     email = Column(String(120), primary_key=True)
 
     confirm_users = relationship("ConfirmUser", back_populates="users", uselist=False)
+    workspaces = relationship("Workspaces")
+    trackers = relationship("Trackers")
 
 
 class ConfirmUser(Base):
