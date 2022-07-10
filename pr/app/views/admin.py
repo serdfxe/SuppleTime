@@ -1,12 +1,22 @@
 from flask import Blueprint, render_template, request
 
 from SuppleTime.pr.app.config import *
+
 from SuppleTime.pr.app.containers import Container
+
 from SuppleTime.pr.app.models.user.services import *
+from SuppleTime.pr.app.models.Workspace.services import *
 
 
 admin = Blueprint("admin", __name__)
 container = Container()
+
+
+def create_form(action: str, tasks):
+    form = f"<form action='{action}' method='post'>"
+    for i in tasks:
+        form += f"<input type='{i[0]}' name='{i[1]}' value='{i[-1]}'>"
+    return form+"<input type='submit'></form>"
 
 
 @admin.route("/users", methods=('GET', 'POST'))
@@ -41,3 +51,13 @@ def create_user_route():
 def delete_all_users_route():
     delete_all_users()
     return "OK"
+
+
+@admin.route("/task_form", methods=["GET"])
+def track_route():
+    return create_form("/admin/post_task", [["text", "name"], ["time", "date_one"], ["time", "date_two"], ["checkbox", "billable"]])
+
+
+@admin.route("/post_task", methods=["POST"])
+def create_task_route():
+    return str(request.form)

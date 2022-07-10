@@ -18,7 +18,7 @@ def unauthorized_callback():
 @auth.route('/signup', methods=("GET", "POST"))
 def signup_route():
     if request.method == "POST":
-        mes = register_user(request.form)
+        mes = preregister_user(request.form)
         flash(mes[0],mes[1])
     return render_template("auth/form.html", form=authforms["signup"])
 
@@ -41,11 +41,10 @@ def auth_root():
 
 @auth.route("/confirmemail/<s>", methods=("GET", "POST"))
 def confirm_email_route(s):
-    user = get_nonconfirmed_user_by_token(s)
+    user = get_nonconfirmed_user(confirm_token=s)
 
     if user:
-        delete_nonconfirmed_user(user.id)
-        user = create_user(user.email.split("@")[0], user.email, user.password_hash)
+        user = final_register_user(user)
         if user:
             login_user(user)
             return redirect(url_for("main.empty_route"))

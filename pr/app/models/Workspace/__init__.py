@@ -12,14 +12,14 @@ class Workspaces(Base):
     name = Column(String(120))
     ownerid = Column(Integer, ForeignKey(User.id), primary_key = True) #This should be foreign_key to user.id
 
-    tracked_tasks = relationship("Tracked_tasks")
+    #tracked_tasks = relationship("Tracked_tasks")
     
     
 class Tracked_tasks(Base):
     __tablename__ = "tracked_tasks"
     
     id = Column(Integer, primary_key = True, autoincrement = True, unique=True)
-    workspace_id = Column(Integer, ForeignKey(Workspaces.id)) #Foreign to Workspaces.id
+    #workspace_id = Column(Integer, ForeignKey(Workspaces.id)) #Foreign to Workspaces.id
     name = Column(String(120))
     date_one = Column(DateTime)
     date_two = Column(DateTime)
