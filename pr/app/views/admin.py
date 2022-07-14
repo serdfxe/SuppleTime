@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+
+from flask_login import login_required, current_user
 
 from SuppleTime.pr.app.config import *
 
@@ -58,6 +60,12 @@ def track_route():
     return create_form("/admin/post_task", [["text", "name"], ["time", "date_one"], ["time", "date_two"], ["checkbox", "billable"]])
 
 
-@admin.route("/post_task", methods=["POST"])
+@admin.route("/post_task", methods=["POST"]) #вырубили электричество, потом доделаю
 def create_task_route():
-    return str(request.form)
+    tracked_user_id = current_user.id
+    flash(post_task(request.form, tracked_user_id))
+    return redirect(url_for("main.tracker_route"))
+
+@admin.route("/get_tasks/<s>", methods=["GET"])
+def get_tasks_route(s):
+    return str([(i.tracked_user_id, i.name, i.date_one, i.date_two) for i in get_all_users_tasks(int(s))])

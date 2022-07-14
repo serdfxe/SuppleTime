@@ -1,0 +1,269 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracker</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main/tracker.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main/messages.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static', filename='img/sidebar/minilogo.svg')}}">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="logos">
+            <img src="{{url_for('static', filename='img/sidebar/minilogo.svg')}}" class="minilogo">
+            <img src="{{url_for('static', filename='img/sidebar/logo.svg')}}" class="logo">
+        </div>
+
+
+        <ul>
+            {% for i in sidebar_components %}
+                {% if sidebar_components[i] == current %}
+                    <li class="current">
+                        <img src="{{url_for('static', filename='img/sidebar/enable/'+url_for_sidebar_components[sidebar_components[i]])}}" alt="">
+                        <a>{{i}}</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <img src="{{url_for('static', filename='img/sidebar/disable/'+url_for_sidebar_components[sidebar_components[i]])}}" alt="">
+                        <a href="{{ sidebar_components[i] }}">{{i}}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="content" id="content">
+        <div class="header" id="header">
+            <input type="text" name="search" id="task_name" placeholder="Введите задачу..." autocomplete="off" class="input__task">
+            <div class="buttons">
+                <div class="doublebuttonsback">
+                    <div class="topbutton" id="topbutton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
+                            <path d="M12 7.49989L0.75 14.8611L0.75 0.138672L12 7.49989Z" fill="#FEFEFE"/>
+                        </svg>
+                    </div>
+                    <div class="bottombutton" id="bottombutton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 110 110" fill="none">
+                            <rect x="110" y="43" width="25" height="110" transform="rotate(90 110 43)" fill="#FEFEFE"/>
+                            <rect x="67" y="110" width="25" height="110" transform="rotate(-180 67 110)" fill="#FEFEFE"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="playerbutton" id="playerbutton">
+                    <svg id="player" style="margin-left: 3px;" class="displaying" xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
+                        <path d="M12 7.49989L0.75 14.8611L0.75 0.138672L12 7.49989Z" fill="#FEFEFE"/>
+                    </svg>
+                    <svg id="plus" class="hidden plus" xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 110 110" fill="none">
+                        <rect x="110" y="43" width="25" height="110" transform="rotate(90 110 43)" fill="#FEFEFE"/>
+                        <rect x="67" y="110" width="25" height="110" transform="rotate(-180 67 110)" fill="#FEFEFE"/>
+                    </svg>
+                </div>
+
+                <div class="timer" id="timer">
+                    <h3 class="displaying" id="playertimer">0:00:00</h3>
+                    <input type="text" name="time_from" id="time_from" class="hidden" value="00:00" maxlength="5"> <h3 class="hidden" id="plustimer" style="font-size: 20px;"> ➔ </h3> <input type="text" name="time_to" class="hidden" id="time_to" value="00:00" maxlength="5">
+                </div>
+
+                <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
+            
+                <div class="billable" id="billable">$</div>
+            </div>
+        </div>
+
+        <div class="under__header">
+            <div class="planned">
+                <p>Запланировано</p>
+            </div>
+            <details>
+                <summary><svg width="18" height="9" viewBox="0 0 18 9" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="mask0_362_777" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="9"><path d="M17.2026 0.371131C17.086 0.253533 16.9472 0.160191 16.7943 0.0964931C16.6414 0.0327948 16.4774 0 16.3118 0C16.1462 0 15.9822 0.0327948 15.8293 0.0964931C15.6764 0.160191 15.5376 0.253533 15.421 0.371131L9.67456 6.11755C9.55792 6.23515 9.41915 6.32849 9.26626 6.39219C9.11336 6.45589 8.94937 6.48869 8.78374 6.48869C8.6181 6.48869 8.45411 6.45589 8.30122 6.39219C8.14832 6.32849 8.00955 6.23515 7.89292 6.11755L2.14649 0.371131C2.02985 0.253533 1.89109 0.160191 1.73819 0.0964931C1.5853 0.0327948 1.4213 0 1.25567 0C1.09004 0 0.926046 0.0327948 0.773152 0.0964931C0.620258 0.160191 0.481489 0.253533 0.364851 0.371131C0.131166 0.606211 0 0.924211 0 1.25568C0 1.58715 0.131166 1.90515 0.364851 2.14023L6.12382 7.8992C6.82958 8.60408 7.78626 9 8.78374 9C9.78121 9 10.7379 8.60408 11.4437 7.8992L17.2026 2.14023C17.4363 1.90515 17.5675 1.58715 17.5675 1.25568C17.5675 0.924211 17.4363 0.606211 17.2026 0.371131V0.371131Z" fill="black"/></mask><g mask="url(#mask0_362_777)"><path d="M17.2026 0.371131C17.086 0.253533 16.9472 0.160191 16.7943 0.0964931C16.6414 0.0327948 16.4774 0 16.3118 0C16.1462 0 15.9822 0.0327948 15.8293 0.0964931C15.6764 0.160191 15.5376 0.253533 15.421 0.371131L9.67456 6.11755C9.55792 6.23515 9.41915 6.32849 9.26626 6.39219C9.11336 6.45589 8.94937 6.48869 8.78374 6.48869C8.6181 6.48869 8.45411 6.45589 8.30122 6.39219C8.14832 6.32849 8.00955 6.23515 7.89292 6.11755L2.14649 0.371131C2.02985 0.253533 1.89109 0.160191 1.73819 0.0964931C1.5853 0.0327948 1.4213 0 1.25567 0C1.09004 0 0.926046 0.0327948 0.773152 0.0964931C0.620258 0.160191 0.481489 0.253533 0.364851 0.371131C0.131166 0.606211 0 0.924211 0 1.25568C0 1.58715 0.131166 1.90515 0.364851 2.14023L6.12382 7.8992C6.82958 8.60408 7.78626 9 8.78374 9C9.78121 9 10.7379 8.60408 11.4437 7.8992L17.2026 2.14023C17.4363 1.90515 17.5675 1.58715 17.5675 1.25568C17.5675 0.924211 17.4363 0.606211 17.2026 0.371131V0.371131Z" fill="#9D9D9D"/></g></svg>Список</summary>
+                <ul>
+                    <li>Таймлайн</li>
+                    <li>Список</li>
+                </ul>
+            </details>
+        </div>
+    </div>
+
+   <div class="flashes" id="messages">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{category}}">
+                    <h1>
+                        {{ message }}
+                    </h1>
+
+                    <h2>
+                        {{ {"message": "!", "error": "×", "success": "☑"}[category] }}
+                    </h2>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </div>
+</body>
+<script>
+    let sidebar =  document.getElementById('sidebar')
+    let content = document.getElementById("content")
+
+    sidebar.onmouseover = function(){
+        content.style.marginLeft = "230px"
+    };
+    sidebar.onmouseout = function(){
+        content.style.marginLeft = "50px"
+    };
+
+    let topbutton = document.getElementById("topbutton");
+    let bottombutton = document.getElementById("bottombutton");
+    let tagbutton = document.getElementById("tagbutton");
+    let tagbuttonpath = document.getElementById("tagbuttonpath");
+    let billable = document.getElementById("billable");
+    let player = document.getElementById("player");
+    let plus = document.getElementById("plus");
+    let playertimer = document.getElementById("playertimer");
+    let plustimer = document.getElementById("plustimer");
+    let time_input_1 = document.getElementById("time_from");
+    let time_input_2 = document.getElementById("time_to")
+    let currentposition = 1;
+    const hidden = 'hidden';
+    const display = 'displaying'
+
+    topbutton.style.background = "var(--dark-dominant-color)";
+    bottombutton.style.background = "var(--h2)";
+
+    bottombutton.onclick = function(){
+        if (topbutton.style.background == "var(--dark-dominant-color)") {
+            topbutton.style.background = "var(--h2)";
+            bottombutton.style.background = "var(--dark-dominant-color)";
+        }
+        if (currentposition == 1){
+            currentposition = 2;
+            /*billable.style.transform=`translate(-76px,0)`;
+            tagbutton.style.transform=`translate(-76px,0)`;   */
+        }
+        if (plus.classList.contains('hidden')){
+            plus.classList.add(display);
+            plus.classList.remove(hidden);
+
+            player.classList.add(hidden);
+            player.classList.remove(display);
+
+            plustimer.classList.add(display);
+            plustimer.classList.remove(hidden);
+
+            playertimer.classList.remove(display);
+            playertimer.classList.add(hidden);
+
+            time_input_1.classList.add(display);
+            time_input_1.classList.remove(hidden);
+
+            time_input_2.classList.add(display);
+            time_input_2.classList.remove(hidden);
+        }
+    }
+
+    topbutton.onclick = function(){
+        if (topbutton.style.background != "var(--dark-dominant-color)") {
+            bottombutton.style.background = "var(--h2)";
+            topbutton.style.background = "var(--dark-dominant-color)";
+        }
+        if (currentposition == 2){
+            currentposition = 1;
+            /*billable.style.transform=`translate(0,0)`;
+            tagbutton.style.transform=`translate(0,0)`; */
+        }
+        if (player.classList.contains('hidden')){
+            player.classList.add(display);
+            player.classList.remove(hidden);
+
+            plus.classList.add(hidden);
+            plus.classList.remove(display);
+
+            plustimer.classList.add(hidden);
+            plustimer.classList.remove(display);
+
+            playertimer.classList.remove(hidden);
+            playertimer.classList.add(display);
+
+            time_input_1.classList.add(hidden);
+            time_input_1.classList.remove(display);
+
+            time_input_2.classList.add(hidden);
+            time_input_2.classList.remove(display);
+        }
+
+    }
+
+    tagbutton.onmouseover = function() {
+        tagbuttonpath.style.fill = "var(--complement-color)";
+    }
+
+    tagbutton.onmouseleave = function() {
+        tagbuttonpath.style.fill = "var(--h2)";
+    }
+
+    billable.onclick = function() {
+        if (billable.style.color != "var(--complement-color)") {
+            billable.style.color = "var(--complement-color)"
+        } else {
+            billable.style.color = "var(--h2)"
+        }
+    }
+
+    let playerbutton = document.getElementById("playerbutton")
+
+    let start_timer = function() {
+        let start_time = new Date();
+        start_time.setHours(start_time.getHours() + 3);
+        var x = setInterval(function(){
+            playertimer.textContent = new Date(new Date() - start_time).toTimeString().split(' ')[0];
+            playertimer.style.width = (playertimer.textContent.length) + "ch";
+        }, 1000);
+        playerbutton.onclick = function() {
+            clearInterval(x);
+            playerbutton.onclick = start_timer;
+        };
+    }
+
+    let play = function() {
+        if (!player.classList.contains('hidden')) {
+            start_timer()
+        } else {
+            console.log(123)
+            form = document.createElement("form")
+            form.method = "post"
+            form.action = "/app/tracker"
+
+            l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value]]
+
+            if (billable.style.color == "var(--complement-color)") {
+                l.push(["billable", 1])
+            }
+
+            for (let i = 0; i < l.length; i++) {
+                inp = document.createElement("input")
+                inp.type = "hidden"
+                inp.name = l[i][0]
+                inp.value = l[i][1]
+                form.appendChild(inp)
+            }
+            
+            document.body.appendChild(form)
+            form.submit()
+        }
+    }
+    
+    var del_mes = setInterval(function(){
+        if (document.getElementById("messages").children.length) {
+            document.getElementById("messages").children[0].remove()
+        } else {
+            clearInterval(del_mes)
+        }
+        }, 2000);
+
+    playerbutton.onclick = play;
+</script>
+</html>
