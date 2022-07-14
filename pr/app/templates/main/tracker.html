@@ -85,6 +85,24 @@
                 </ul>
             </details>
         </div>
+
+        <div class="daylist">
+            <p>Сегодня</p>
+            <ul>
+                {% for i in range(100) %}
+                    <li>
+                        <div class="task_and_tags">
+                            <h1>Task {{i}}</h1>
+                            <h2>{{ ["•$", ""][False] }}</h2>
+                        </div>
+
+                        <div class="task_info">
+                            <h1>1:35</h1>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
    <div class="flashes" id="messages">

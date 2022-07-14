@@ -13,6 +13,12 @@
     --h2: #9D9D9D;
     --h1: #FEFEFE;
 }
+
+.content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
  
 .header {
     width: 100%;
@@ -335,4 +341,95 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
 
 .playerbutton:hover .timer input {
     width: fit-content;
+}
+
+.daylist {
+    width: 1005px;
+    height: 624px;
+    background-color: var(--h1);
+    margin-top: 77px;
+    border-radius: 34px;
+    box-shadow: 10px 10px 55px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.daylist p {
+    width: calc(100% - 51px);
+    color: var(--complement-color);
+    margin: 16 0 0 51;
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.daylist ul {
+    margin-top: 10px;
+    width: 937px;
+    overflow-y: scroll;
+    height: 530px;
+    border-top: 2px var(--complement-color) solid;
+    list-style: none;
+    padding: 0;
+}
+
+.daylist ul li {
+    margin: 0;
+    height: 46px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px var(--h2) solid;
+}
+
+.daylist ul li .task_and_tags {
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.daylist ul li .task_and_tags h1 {
+    font-weight: 400;
+    font-size: 30px;
+    color: var(--h2);
+}
+
+.daylist ul li .task_and_tags h2 {
+    font-weight: 100;
+    font-size: 15px;
+    color: var(--complement-color);
+    margin-left: 6px;
+}
+
+.daylist ul li .task_info {
+    margin-right: 20px;
+}
+
+.daylist ul li .task_info h1 {
+    font-weight: 700;
+    font-size: 25px;
+    color: var(--complement-color);
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 5px;
+}
+  
+  /* Track */
+::-webkit-scrollbar-track {
+    background: none; 
+}
+   
+  /* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--h2); 
+    background: none;
+}
+  
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--complement-color);
+    background: none;
 }
