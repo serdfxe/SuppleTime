@@ -1,9 +1,12 @@
 DATABASE_URL = "postgresql+psycopg2://test:314159@127.0.0.1:5432/suppletime_db"
 
-EMAIL_PASS = "31415926535asd"
-EMAIL_ADDRES = "noreply@sheeesh.ru"
+# EMAIL_PASS = "31415926535asd"
+# EMAIL_ADDRES = "noreply@sheeesh.ru"
 
-salt = ""
+EMAIL_PASS = "314159asdffdsa"
+EMAIL_ADDRES = "noreply@suppletime.ru"
+
+salt = "" 
 
 sidebar_components = {
     "Главная":"main",

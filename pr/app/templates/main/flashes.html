@@ -1,0 +1,26 @@
+<div class="flashes" id="messages">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{category}}">
+                    <h1>
+                        {{ message }}
+                    </h1>
+
+                    <h2>
+                        {{ {"message": "!", "error": "×", "success": "☑"}[category] }}
+                    </h2>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+<script>
+    var del_mes = setInterval(function(){
+        if (document.getElementById("messages").children.length) {
+            document.getElementById("messages").children[0].remove()
+        } else {
+            clearInterval(del_mes)
+        }
+        }, 2000);
+</script>

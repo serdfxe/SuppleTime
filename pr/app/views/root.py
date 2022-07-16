@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from random import randint
 
 
@@ -14,4 +14,5 @@ def get_list_colors(color):
 @root.route("/", methods=['GET', 'POST'])
 def chil_page_route():
     color = color_list[randint(0, len(color_list) - 1)]
+    return redirect(url_for("main.empty_route"))
     return render_template("chil.html", color=get_list_colors(color))

@@ -66,6 +66,18 @@ def create_task_route():
     flash(post_task(request.form, tracked_user_id))
     return redirect(url_for("main.tracker_route"))
 
+
 @admin.route("/get_tasks/<s>", methods=["GET"])
 def get_tasks_route(s):
     return str([(i.tracked_user_id, i.name, i.date_one, i.date_two) for i in get_all_users_tasks(int(s))])
+
+
+@admin.route("delete_all_tasks", methods=["GET"])
+def delete_all_tasks_route():
+    delete_all_users_tasks(current_user.id)
+    return "OK"
+
+
+@admin.route("email", methods=["GET"])
+def email_route():
+    return render_template("auth/confirm_email_mail.html", href=f"suppletime.ru/auth/confirmemail/{123123}")

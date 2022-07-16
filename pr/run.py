@@ -1,5 +1,7 @@
-from SuppleTime.pr.app import create_app
 from waitress import serve
+
+from SuppleTime.pr.app import create_app
+
 
 app = create_app()
 

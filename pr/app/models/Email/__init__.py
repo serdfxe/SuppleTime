@@ -18,7 +18,7 @@ class Email():
         return smtp
 
     
-    def send(email: str, body: str, sub: str):
+    def send(email: str, body: str, sub: str, is_html=False):
         smtp = smtplib.SMTP("smtp.timeweb.ru")
         smtp.starttls() 
         print(f'addres = {Email._addres} password = {Email._password}')
@@ -29,7 +29,7 @@ class Email():
         msg['From'] = Email._addres
         msg['To'] = email
         msg['Subject'] = sub
-        msg.attach(MIMEText(message, 'plain'))
+        msg.attach(MIMEText(message, ('plain', 'html')[is_html]))
         
         smtp.sendmail(msg['From'], msg['To'], msg.as_string())
         

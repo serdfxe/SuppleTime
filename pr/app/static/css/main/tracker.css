@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
 
 :root {
+    --eror-color: #FB4952; 
+    --message-color: #36B879;
     --dark-dominant-color: #101727;
     --light-dominant-color: #F9F5F5;
     --light-complement-color: #D9D9D9;
@@ -403,14 +405,62 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
 }
 
 .daylist ul li .task_info {
-    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
 }
 
 .daylist ul li .task_info h1 {
+    margin: 0 10px 0 0;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--h2);
+}
+
+.daylist ul li .task_info h2 {
     font-weight: 700;
     font-size: 25px;
+    margin: 0 15px 0 0;
     color: var(--complement-color);
 }
+
+.dropdown {
+    padding: 0 10 0 10;
+    display: flex;
+}
+
+.dropdown-content {
+    margin-left: 10px;
+    padding: 2 0 2 0;
+    display: none;
+    position: absolute;
+    width: fit-content;
+    min-width: 100px;
+    background-color: var(--light-dominant-color);
+    border-radius: 5px;
+    border: var(--complement-color) 1px solid;
+}
+
+.dropdown-content form {
+    margin: 0;
+}
+
+.dropdown-content input[type="submit"] {
+    border: none;
+    display: block;
+    padding: 5 0 5 0;
+    margin: 0;
+    text-decoration: none;
+    color: var(--eror-color);
+    width: 100%;
+    filter: drop-shadow(0px 1px 10px rgba(0, 0, 0, 0.1));
+    text-align: center;
+    cursor: pointer;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown-content input[type="submit"]:hover {background-color: var(--light-complement-color);}
 
 ::-webkit-scrollbar {
     width: 5px;

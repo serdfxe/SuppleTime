@@ -1,0 +1,28 @@
+<div class="daylist" id="daylist">
+    <p>Сегодня</p>
+    <ul>
+        {% for i in tracked_tasks %}
+            <li>
+                <div class="task_and_tags">
+                    <h1>{{i[0]}}</h1>
+                    <h2>{{ ["•$", ""][i[1]] }}</h2>
+                </div>
+
+                <div class="task_info">
+                    <h1>{{i[2]}} ➔ {{i[3]}}</h1>
+                    <h2>{{i[4]}}</h2>
+                    <div class="dropdown">
+                        <svg class="dropbtn" xmlns="http://www.w3.org/2000/svg" width="5" height="22" viewBox="0 0 5 22" fill="none">
+                            <path d="M2.52192 3.55556C3.50376 3.55556 4.2997 2.75962 4.2997 1.77778C4.2997 0.795938 3.50376 0 2.52192 0C1.54008 0 0.744141 0.795938 0.744141 1.77778C0.744141 2.75962 1.54008 3.55556 2.52192 3.55556Z" fill="#9B9CA6"/>
+                            <path d="M2.52192 12.4444C3.50376 12.4444 4.2997 11.6485 4.2997 10.6667C4.2997 9.68483 3.50376 8.88889 2.52192 8.88889C1.54008 8.88889 0.744141 9.68483 0.744141 10.6667C0.744141 11.6485 1.54008 12.4444 2.52192 12.4444Z" fill="#9B9CA6"/>
+                            <path d="M2.52192 21.3333C3.50376 21.3333 4.2997 20.5374 4.2997 19.5556C4.2997 18.5737 3.50376 17.7778 2.52192 17.7778C1.54008 17.7778 0.744141 18.5737 0.744141 19.5556C0.744141 20.5374 1.54008 21.3333 2.52192 21.3333Z" fill="#9B9CA6"/>
+                        </svg>
+                        <div class="dropdown-content">
+                            <form action="tracker/delete_task" method="post"><input type="hidden" name="task_id" value="{{i[5]}}"> <input type="submit" value="удалить"></form>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

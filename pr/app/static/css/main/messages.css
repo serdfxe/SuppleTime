@@ -70,7 +70,7 @@
 
 .flashes .error h2 {
     color: #F23842;
-    font-size: 70px;
+    font-size: 66px;
     margin-right: 25px;
 }
 
@@ -80,4 +80,6 @@
 
 .flashes .success h2 {
     color: #2DA069;
+    height: 100px;
+    line-height: 1;
 }

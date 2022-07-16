@@ -2,7 +2,7 @@ import re
 import secrets
 import hashlib
 
-from flask import sessions
+from flask import sessions, render_template
 from flask_login import login_user
 
 from SuppleTime.pr.app.models.user.login_manager import login_manager
@@ -138,13 +138,14 @@ def login(data):
 @inject
 def create_user(name: str, email: str, password_hash: str, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     with unit_of_work as uow:
-        new_user = User(id=len(get_all_users()), name=name, email=email)
-        new_confirm_user = ConfirmUser(token=generate_token(), password_hash=password_hash, id=new_user.id)
+        new_user = User(name=name, email=email)
         uow.repository.save(new_user)
-        uow.repository.save(new_confirm_user)
         uow.commit()
         uow.repository.session.refresh(new_user)
         uow.repository.session.expunge(new_user)
+        new_confirm_user = ConfirmUser(id=new_user.id, token=generate_token(), password_hash=password_hash)
+        uow.repository.save(new_confirm_user)
+        uow.commit()
         return new_user
 
 
@@ -160,9 +161,20 @@ def delete_all_users(unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     with unit_of_work as uow:
         #users = get_all_users()
         uow.repository.session.query(ConfirmUser).delete()
-        uow.repository.session.query(User).delete()
-        uow.repository.session.query(NonConfirmedUser).delete()
         uow.repository.session.query(Trackers).delete()
+        uow.repository.session.query(User).delete()
+        # uow.repository.session.query(NonConfirmedUser).delete()
+        
+        uow.commit()
+
+
+@inject
+def delete_user(id: int, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+    with unit_of_work as uow:
+        uow.repository.session.query(Trackers).filter_by(user_id=id).delete()
+        uow.repository.session.query(ConfirmUser).filter_by(id=id).delete()
+        uow.repository.session.query(Tracked_tasks).filter_by(tracked_user_id=id).delete()
+        uow.repository.session.query(User).filter_by(id=id).delete()
         
         uow.commit()
 
@@ -184,11 +196,15 @@ def preregister_user(data) -> str:
     if email == '' or not is_valid_email(email): return ("Incorrect email","error")#("������������ email","error")
     is_valid = is_valid_password(password)
     if is_valid is not True: return (is_valid, "error")
-    if get_nonconfirmed_user(email=email): return ("This email address is already taken please choose a unique one","error")#("������������ � ����� email ��� ����������", "error")
+    # if get_nonconfirmed_user(email=email): return ("This email address is already taken please choose a unique one","error")#("������������ � ����� email ��� ����������", "error")
+    if get_user(email=email): return ("This email address is already taken please choose a unique one","error")
+    nonuser = get_nonconfirmed_user(email=email)
+    if nonuser:
+        delete_nonconfirmed_user(nonuser.id)
     
     confirm_token = create_nonconfirmed_user(email, password)
     if confirm_token:
-        Email.send(email, f"suppletime.ru/auth/confirmemail/{confirm_token}", "Email Verify")
+        Email.send(email, render_template("auth/confirm_email_mail.html", confirm_token=confirm_token), "Email Verify", is_html=True)
         return ("We send email on your email", "message") 
     return ("Unknown error, please try again later", "error")
 
@@ -203,7 +219,7 @@ def final_register_user(user):
 def send_passwd_mail(email: str):
     if email == '':
         return ("Valid email", "error")
-    user = is_user_in_db(email)
+    user = get_user(email=email)
     if user:
         Email.send(email, f"suppletime.ru/auth/passwordchange/{user.confirm_users.token}", "Password change")
         return ("Check your email.", "message")
@@ -212,7 +228,7 @@ def send_passwd_mail(email: str):
 def send_enter_mail(email: str):
     if email == '':
         return ("Valid email", "error")
-    user = is_user_in_db(email)
+    user = get_user(email=email)
     if user:
         Email.send(email, f"suppletime.ru/auth/enterbymail/{user.confirm_users.token}", "Enter by mail")
         return ("Check your email.", "message")

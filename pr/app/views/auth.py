@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, logout_user, login_required
+from flask_login import LoginManager, logout_user, login_required, current_user
 
 from SuppleTime.pr.app.models.user.services import *
 
@@ -62,7 +62,7 @@ def enterbyemail_route():
 
 @auth.route("/enterbymail/<s>", methods=("GET", "POST"))
 def enterbytoken_route(s):
-    user = get_confirmed_user_by_token(s)
+    user = get_confirmed_user(token=s)
 
     if user:
         login_user(user.users)
@@ -79,7 +79,7 @@ def forgotpassword_route():
 
 @auth.route("/passwordchange/<s>", methods=("GET", "POST"))
 def passwordchange_route(s):
-    user = get_confirmed_user_by_token(s)
+    user = get_confirmed_user(token=s)
     if user:
         if request.method == "POST":
             passwd1 = request.form["password1"]
@@ -93,6 +93,14 @@ def passwordchange_route(s):
 def logout_route():
     logout_user()
     return redirect(url_for("auth.auth_root"))
+
+
+@auth.route("/delete_my_account", methods=["POST"])
+@login_required
+def delete_my_account_route():
+    delete_user(current_user.id)
+    return redirect(url_for("auth.auth_root"))
+
 
 #@auth.route('/check_password', methods=("GET", "POST"))
 #def check_password_route():

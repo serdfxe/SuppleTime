@@ -11,6 +11,22 @@
     --h1: #FEFEFE;
 }
 
+:root {
+    --eror-color: #FB4952; 
+    --message-color: #36B879;
+    --dark-dominant-color: #101727;
+    --light-dominant-color: #F9F5F5;
+    --light-complement-color: #D9D9D9;
+    --complement-color: #58596B;
+    --light-complement-color: #D9D9D9;
+    --accent-color: #7780FF;
+    --light-accent-color: #E1E3FF;
+    --highlight-color: #222331;
+    --highlight-text-color: #EEF0FF;
+    --h2: #9D9D9D;
+    --h1: #FEFEFE;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     display: flex;
@@ -39,6 +55,9 @@ body {
     margin-left: 50px;
     transition: 0.5s;
     background-color: var(--light-dominant-color);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 @keyframes content_anim {
@@ -50,17 +69,29 @@ body {
 
 .sidebar .logos {
     display: flex;
+    align-items: center;
 }
 
 .sidebar .logos .minilogo {
+    transition: 0.8s;
+}
+
+.sidebar .logos .minilogo svg {
     margin: 15px 0px 0px 11px;
     height: 40px;
+    width: 29;
     transition: 0.5s;
 }
 
 .sidebar .logos .logo {
-    margin: 18px 20px 0px 70px;
     transition: 0.5s;
+}
+
+.sidebar .logos .logo svg {
+    margin: 18px 30px 0px 60px;
+    transition: 0.5s;
+    height: 50px;
+    width: 190px;
 }
 
 .sidebar:hover {
@@ -71,11 +102,15 @@ body {
     width: 50px;
 }
 
-.sidebar:hover .minilogo {
+.sidebar:hover .minilogo svg {
     margin-left: -50px;
 }
 
-.sidebar:hover .logo {
+.sidebar:hover .minilogo {
+    margin-left: -20px;
+}
+
+.sidebar:hover .logo svg{
     margin-left: 40px;
 }
 
@@ -99,6 +134,7 @@ body {
     flex-direction: column;
     z-index: 1;
     position: relative;
+    margin-top: 10;
 }
 
 .sidebar li {
@@ -114,7 +150,7 @@ body {
 
 .sidebar li a {
     text-decoration: none;
-    color: var(--complement-color);
+    color: var(--h2);
     font-size: 17px;
 }
 
