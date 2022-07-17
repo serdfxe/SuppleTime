@@ -221,7 +221,7 @@ def send_passwd_mail(email: str):
         return ("Valid email", "error")
     user = get_user(email=email)
     if user:
-        Email.send(email, f"suppletime.ru/auth/passwordchange/{user.confirm_users.token}", "Password change")
+        Email.send(email, f"suppletime.ru/auth/passwordchange/{user.confirm_users.token}", "Password change", is_html=True)
         return ("Check your email.", "message")
 
 

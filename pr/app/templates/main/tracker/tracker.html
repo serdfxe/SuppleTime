@@ -44,85 +44,52 @@
         content.style.marginLeft = "50px"
     };
 
+    let state = "{{state['state']}}"
+    if (state == "") {
+        state = "none";
+    }
+
     let topbutton = document.getElementById("topbutton");
     let bottombutton = document.getElementById("bottombutton");
+
+    let plus_button = document.getElementById("plus-button");
+    let track_button = document.getElementById("track-button");
+
     let tagbutton = document.getElementById("tagbutton");
     let tagbuttonpath = document.getElementById("tagbuttonpath");
     let billable = document.getElementById("billable");
-    let player = document.getElementById("player");
-    let plus = document.getElementById("plus");
-    let playertimer = document.getElementById("playertimer");
-    let plustimer = document.getElementById("plustimer");
+
+    let forms = document.getElementById("forms")
+    // let player = document.getElementById("player");
+    // let plus = document.getElementById("plus");
+    // let playertimer = document.getElementById("playertimer");
+    // let plustimer = document.getElementById("plustimer");
     let time_input_1 = document.getElementById("time_from");
     let time_input_2 = document.getElementById("time_to")
-    let currentposition = 1;
-    const hidden = 'hidden';
-    const display = 'displaying'
+    // let currentposition = 1;
+    // const hidden = 'hidden';
+    // const display = 'displaying'
 
     topbutton.style.background = "var(--dark-dominant-color)";
     bottombutton.style.background = "var(--h2)";
-
-    bottombutton.onclick = function(){
-        if (topbutton.style.background == "var(--dark-dominant-color)") {
-            topbutton.style.background = "var(--h2)";
-            bottombutton.style.background = "var(--dark-dominant-color)";
-        }
-        if (currentposition == 1){
-            currentposition = 2;
-            /*billable.style.transform=`translate(-76px,0)`;
-            tagbutton.style.transform=`translate(-76px,0)`;   */
-        }
-        if (plus.classList.contains('hidden')){
-            plus.classList.add(display);
-            plus.classList.remove(hidden);
-
-            player.classList.add(hidden);
-            player.classList.remove(display);
-
-            plustimer.classList.add(display);
-            plustimer.classList.remove(hidden);
-
-            playertimer.classList.remove(display);
-            playertimer.classList.add(hidden);
-
-            time_input_1.classList.add(display);
-            time_input_1.classList.remove(hidden);
-
-            time_input_2.classList.add(display);
-            time_input_2.classList.remove(hidden);
-        }
-    }
+    {% if state["billable"] %}
+        billable.style.color = "var(--complement-color)"
+    {% endif %}
 
     topbutton.onclick = function(){
         if (topbutton.style.background != "var(--dark-dominant-color)") {
             bottombutton.style.background = "var(--h2)";
             topbutton.style.background = "var(--dark-dominant-color)";
+            forms.style.animation = "form-change-to-track 0.5s 1 ease-in-out forwards"
         }
-        if (currentposition == 2){
-            currentposition = 1;
-            /*billable.style.transform=`translate(0,0)`;
-            tagbutton.style.transform=`translate(0,0)`; */
+    }
+
+    bottombutton.onclick = function(){
+        if (topbutton.style.background == "var(--dark-dominant-color)") {
+            topbutton.style.background = "var(--h2)";
+            bottombutton.style.background = "var(--dark-dominant-color)";
+            forms.style.animation = "form-change-to-plus 0.5s 1 ease-in-out forwards"
         }
-        if (player.classList.contains('hidden')){
-            player.classList.add(display);
-            player.classList.remove(hidden);
-
-            plus.classList.add(hidden);
-            plus.classList.remove(display);
-
-            plustimer.classList.add(hidden);
-            plustimer.classList.remove(display);
-
-            playertimer.classList.remove(hidden);
-            playertimer.classList.add(display);
-
-            time_input_1.classList.add(hidden);
-            time_input_1.classList.remove(display);
-
-            time_input_2.classList.add(hidden);
-            time_input_2.classList.remove(display);
-        }
-
     }
 
     tagbutton.onmouseover = function() {
@@ -143,61 +110,232 @@
 
     let playerbutton = document.getElementById("playerbutton")
 
+    function post_task() {
+        form = document.createElement("form")
+        form.method = "post"
+        form.action = "/app/tracker/post_task"
+
+        l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["billable", billable.style.color != "var(--complement-color)"]]
+
+        for (let i = 0; i < l.length; i++) {
+            inp = document.createElement("input")
+            inp.type = "hidden"
+            inp.name = l[i][0]
+            inp.value = l[i][1]
+            form.appendChild(inp)
+        }
+            
+        document.body.appendChild(form)
+        form.submit()
+    }
+
+    plus_button.onclick = function () {
+        post_task();
+    }
+
+    function post_start() {
+        form = document.createElement("form")
+        form.method = "post"
+        form.action = "/app/tracker/start"
+
+        l = [["name", document.getElementById("task_name").value], ["billable", billable.style.color != "var(--complement-color)"]]
+
+        for (let i = 0; i < l.length; i++) {
+            inp = document.createElement("input")
+            inp.type = "hidden"
+            inp.name = l[i][0]
+            inp.value = l[i][1]
+            form.appendChild(inp)
+        }
+            
+        document.body.appendChild(form)
+        form.submit()
+    }
+
+    function post_pause() {
+        form = document.createElement("form")
+        form.method = "post"
+        form.action = "/app/tracker/pause"
+        document.body.appendChild(form)
+        form.submit()
+    }
+
+    function post_tracked_task() {
+        form = document.createElement("form")
+        form.method = "post"
+        form.action = "/app/tracker/post_tracked_task"
+        document.body.appendChild(form)
+        form.submit()
+    }
+
+    let start_timer_from_time = function (start_time) {
+        let x = setInterval(function(){
+            playertimer.textContent = new Date(new Date() - start_time).toTimeString().split(' ')[0];
+            track_button.onclick = function () {
+                clearInterval(x);
+                document.getElementById("start").classList.remove("hidden");
+                document.getElementById("start").classList.add("displaying");
+
+                document.getElementById("pause").classList.add("hidden");
+                document.getElementById("pause").classList.remove("displaying");
+
+                state = "pause";
+                track_button.onclick = track_button_click;
+                post_pause();
+            }
+            document.getElementById("stop-button").onclick = function () {
+                    state = "none"
+
+                    document.getElementById("start").classList.remove("hidden");
+                    document.getElementById("start").classList.add("displaying");
+
+                    document.getElementById("pause").classList.add("hidden");
+                    document.getElementById("pause").classList.remove("displaying");
+
+                    document.getElementById("stop-button").classList.add("hidden");
+                    document.getElementById("stop-button").classList.remove("stop-button");
+
+                    clearInterval(x);
+
+                    track_button.onclick = track_button_click;
+
+                    post_tracked_task();
+            }
+        }, 1000);
+    }
+
     let start_timer = function() {
         let start_time = new Date();
         start_time.setHours(start_time.getHours() + 3);
-        var x = setInterval(function(){
+        let x = setInterval(function(){
             playertimer.textContent = new Date(new Date() - start_time).toTimeString().split(' ')[0];
-            playertimer.style.width = (playertimer.textContent.length) + "ch";
+            track_button.onclick = function () {
+                clearInterval(x);
+                document.getElementById("start").classList.remove("hidden");
+                document.getElementById("start").classList.add("displaying");
+
+                document.getElementById("pause").classList.add("hidden");
+                document.getElementById("pause").classList.remove("displaying");
+
+                state = "pause";
+                track_button.onclick = track_button_click;
+            }
+            document.getElementById("stop-button").onclick = function () {
+                    state = "none"
+
+                    document.getElementById("start").classList.remove("hidden");
+                    document.getElementById("start").classList.add("displaying");
+
+                    document.getElementById("pause").classList.add("hidden");
+                    document.getElementById("pause").classList.remove("displaying");
+
+                    document.getElementById("stop-button").classList.add("hidden");
+                    document.getElementById("stop-button").classList.remove("stop-button");
+
+                    clearInterval(x);
+
+                    track_button.onclick = track_button_click;
+            }
         }, 1000);
-        playerbutton.onclick = function() {
-            clearInterval(x);
-            playerbutton.onclick = start_timer;
-        };
     }
 
-    let play = function() {
-        if (!player.classList.contains('hidden')) {
-            start_timer()
-        } else {
-            // console.log("start to send form")
-            // const xhr = new XMLHttpRequest();
-            // l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value]]
+    function track_button_click () {
+        if (state == "none") {
+            document.getElementById("start").classList.add("hidden");
+            document.getElementById("start").classList.remove("displaying");
 
-            // l.push(["billable", billable.style.color != "var(--complement-color)"])
-            // let formData = "?";
-            // for (let i = 0; i<l.length; i++) {
-            //     formData += l[i][0] + '=' + l[i][1] + '&';
-            // }
-            // formData = formData.slice(0, -1);
-            // //const formData = 'text1=' + document.getElementById("txt1").value + '&text2=' + document.getElementById("txt2").value;
-            // xhr.open('POST', "/app/tracker"+formData);
-            // console.log(xhr.send(formData))
+            document.getElementById("pause").classList.remove("hidden");
+            document.getElementById("pause").classList.add("displaying");
 
-            console.log(123)
-            form = document.createElement("form")
-            form.method = "post"
-            form.action = "/app/tracker/post_task"
+            document.getElementById("stop-button").classList.remove("hidden");
+            document.getElementById("stop-button").classList.add("stop-button");
 
-            l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value]]
+            state = "track";
 
-            if (billable.style.color != "var(--complement-color)") {
-                l.push(["billable", 1])
-            }
+            start_timer();
 
-            for (let i = 0; i < l.length; i++) {
-                inp = document.createElement("input")
-                inp.type = "hidden"
-                inp.name = l[i][0]
-                inp.value = l[i][1]
-                form.appendChild(inp)
-            }
-            
-            document.body.appendChild(form)
-            form.submit()
+            post_start();
+        } else if (state == "pause") {
+            document.getElementById("start").classList.add("hidden");
+            document.getElementById("start").classList.remove("displaying");
+
+            document.getElementById("pause").classList.remove("hidden");
+            document.getElementById("pause").classList.add("displaying");
+
+            start_time = new Date();
+            start_time.setHours(start_time.getHours() + 3 - parseInt(playertimer.textContent.split(":")[0]));
+            start_time.setMinutes(start_time.getMinutes() -  parseInt(playertimer.textContent.split(":")[1]));
+            start_time.setSeconds(start_time.getSeconds() -  parseInt(playertimer.textContent.split(":")[2]));
+
+            start_timer_from_time(start_time);
+
+            post_start();
         }
     }
 
-    playerbutton.onclick = play;
+    track_button.onclick = track_button_click;
+
+    window.onload = function () {
+        if (state == "track") {
+            document.getElementById("start").classList.add("hidden");
+            document.getElementById("start").classList.remove("displaying");
+
+            document.getElementById("pause").classList.remove("hidden");
+            document.getElementById("pause").classList.add("displaying");
+
+            document.getElementById("stop-button").classList.remove("hidden");
+            document.getElementById("stop-button").classList.add("stop-button");
+
+            start_time = new Date();
+            {% if state["state"] == "track" %}
+                start_time.setHours({{state["start_time"].hour}} + 3);
+                start_time.setMinutes({{state["start_time"].minute}});
+                start_time.setSeconds({{state["start_time"].second + state["pause_time"]}});
+            {% endif %}
+
+            start_timer_from_time(start_time);
+        } else if (state == "pause") {
+            document.getElementById("start").classList.remove("hidden");
+            document.getElementById("start").classList.add("displaying");
+
+            document.getElementById("pause").classList.add("hidden");
+            document.getElementById("pause").classList.remove("displaying");
+
+            document.getElementById("stop-button").classList.remove("hidden");
+            document.getElementById("stop-button").classList.add("stop-button");
+
+            {% if state["state"] == "pause" %}
+                playertimer.textContent = "{{state['time']}}"//new Date(new Date() - start_time).toTimeString().split(' ')[0];
+            {% endif %}
+
+            document.getElementById("stop-button").onclick = function () {
+                    post_tracked_task();
+            }
+        }
+    }
+
+    // let play = function() {
+    //     if (!player.classList.contains('hidden')) {
+    //         start_timer()
+    //     } else {
+    //         // console.log("start to send form")
+    //         // const xhr = new XMLHttpRequest();
+    //         // l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value]]
+
+    //         // l.push(["billable", billable.style.color != "var(--complement-color)"])
+    //         // let formData = "?";
+    //         // for (let i = 0; i<l.length; i++) {
+    //         //     formData += l[i][0] + '=' + l[i][1] + '&';
+    //         // }
+    //         // formData = formData.slice(0, -1);
+    //         // //const formData = 'text1=' + document.getElementById("txt1").value + '&text2=' + document.getElementById("txt2").value;
+    //         // xhr.open('POST', "/app/tracker"+formData);
+    //         // console.log(xhr.send(formData))
+
+    //         console.log(123)
+    //     }
+    // }
+
+    // playerbutton.onclick = play;
 </script>
 </html>

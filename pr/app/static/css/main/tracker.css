@@ -171,7 +171,7 @@ input:focus:-moz-placeholder           {opacity: 0; transition: opacity 0.15s ea
 input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ease;}
 
 
-.header .buttons { 
+.header .right-side { 
     height: 100%;
     display: flex;
     align-items: center;
@@ -179,7 +179,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     margin-right: 17px;
 }
 
-.header .buttons .doublebuttonsback {
+.header .right-side .doublebuttonsback {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -208,7 +208,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     width: 13px;
 }
 
-.header .buttons .topbutton {
+.header .right-side .topbutton {
     background-color: var(--dark-dominant-color);
     margin-top: 5px;
 }
@@ -217,7 +217,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     padding-left: 2px;
 }
 
-.header .buttons .bottombutton {
+.header .right-side .bottombutton {
     background-color: var(--h2);
     margin-bottom: 5px;
 }
@@ -228,16 +228,16 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     border: solid var(--light-accent-color) 6px;
     border-radius: 95px;
     background-color: var(--accent-color);
-    margin-right: 23px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .playerbutton svg {
-    height: 20px;
-    width: 20px;
+    height: 17px;
+    width: 17px;
     cursor: pointer;
 }
 
@@ -252,15 +252,15 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     justify-content: center;
 }
 
-.timer #plustimer {
+#plustimer {
     margin: 5px;
 }
 
-.timer #playertimer {
+#playertimer {
     text-align: center;
     border-radius: 10px;
     border: solid 1px var(--complement-color);
-    width: 160px;
+    width: 180px;
     padding: 10px 0;
 }
 
@@ -298,6 +298,89 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     color: var(--h2);
     cursor: pointer;
 }
+
+@keyframes form-change-to-plus {
+    0% {
+        flex-direction: column;
+    }
+    50% {
+        margin-bottom: 400px;
+    }
+    51% {
+        flex-direction: column-reverse;
+    }
+    100% {
+        margin-bottom: 100px;
+        flex-direction: column-reverse;
+    }
+}
+
+@keyframes form-change-to-track {
+    0% {
+        flex-direction: column-reverse;
+    }
+    50% {
+        margin-bottom: 400px;
+    }
+    51% {
+        flex-direction: column;
+    }
+    100% {
+        margin-bottom: 100px;
+        flex-direction: column;
+    }
+}
+
+.forms {
+    display: flex;
+    align-items: flex-end;
+    height: 200px;
+    transition: 1s;
+    margin-bottom: 100px;
+    flex-direction: column;
+    margin-right: 23px;
+    /* animation: form-change-to-plus 1s ease-in-out forwards; */
+}
+
+.plus-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    height: 100px;
+}
+
+.track-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    height: 100px;
+}
+
+.track-form .timer {
+    width: 190px;
+}
+
+.track-form .stop-button {
+    height: 25px;
+    width: 25px;
+    background-color: #FF6C6C;
+    border-radius: 100px;
+    border: 6px #FFD9D9 solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.track-form .stop-button div {
+    width: 9px;
+    height: 9px;
+    background-color: var(--h1);
+    border-radius: 1px;
+}
+
 
 .billable::selection {
    background: transparent;

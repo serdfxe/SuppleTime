@@ -26,6 +26,7 @@ class Tracked_tasks(Base):
     tracked_user_id = Column(Integer, ForeignKey(User.id))
     planned_task_id = Column(Integer) #Foreign to planned_tasks.id
     billable = Column(Boolean)
+    pause_time = Column(Integer) #time in seconds
     
     
 class Trackers(Base):
@@ -36,3 +37,5 @@ class Trackers(Base):
     pause_time = Column(Integer) #time in seconds
     pause_start_time = Column(DateTime)
     start_time = Column(DateTime)
+    billable = Column(Boolean)
+    name = Column(String(120))
