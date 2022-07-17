@@ -1,6 +1,6 @@
 <div class="header" id="header">
-    <input type="text" name="search" id="task_name" placeholder="Введите задачу..." autocomplete="off" class="input__task">
-    <div class="buttons">
+    <input type="text" name="search" id="task_name" placeholder="Введите задачу..." autocomplete="off" class="input__task" value="{{state['name']}}">
+    <div class="right-side">
         <div class="doublebuttonsback">
             <div class="topbutton" id="topbutton">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
@@ -14,24 +14,48 @@
                 </svg>
             </div>
         </div>
+        <div class="forms" id="forms">
+            <div class="plus-form">
+                <div class="playerbutton" id="plus-button">
+                    <svg id="plus" class="plus" class="displaying" xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 110 110" fill="none">
+                        <rect x="110" y="43" width="25" height="110" transform="rotate(90 110 43)" fill="#FEFEFE"/>
+                        <rect x="67" y="110" width="25" height="110" transform="rotate(-180 67 110)" fill="#FEFEFE"/>
+                    </svg>
+                </div>
+        
+                <div class="timer" id="timer">
+                    <input type="text" name="time_from" id="time_from" value="00:00" maxlength="5"> 
+                    <h3 id="plustimer" style="font-size: 20px;"> ➔ </h3>
+                    <input type="text" name="time_to" id="time_to" value="00:00" maxlength="5">
+                </div>
+        
+                <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
+            
+                <div class="billable" id="billable">$</div>
+            </div>
+            <div class="track-form">
+                <div class="hidden" id="stop-button">
+                    <div></div>
+                </div>
 
-        <div class="playerbutton" id="playerbutton">
-            <svg id="player" style="margin-left: 3px;" class="displaying" xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
-                <path d="M12 7.49989L0.75 14.8611L0.75 0.138672L12 7.49989Z" fill="#FEFEFE"/>
-            </svg>
-            <svg id="plus" class="hidden plus" xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 110 110" fill="none">
-                <rect x="110" y="43" width="25" height="110" transform="rotate(90 110 43)" fill="#FEFEFE"/>
-                <rect x="67" y="110" width="25" height="110" transform="rotate(-180 67 110)" fill="#FEFEFE"/>
-            </svg>
+                <div class="playerbutton" id="track-button">
+                    <svg id="start" class="displaying" style="margin-left: 3px;" xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
+                        <path d="M12 7.49989L0.75 14.8611L0.75 0.138672L12 7.49989Z" fill="#FEFEFE"/>
+                    </svg>
+                    <svg id="pause" xmlns="http://www.w3.org/2000/svg" class="hidden" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                        <path d="M3 0V17M13 0V17" stroke="#FEFEFE" stroke-width="5"/>
+                    </svg>
+                </div>
+        
+                <div class="timer" id="timer">
+                    <h3 id="playertimer">{{}}</h3>
+                    <input type="text" name="time_from" id="time_from" class="hidden" value="00:00" maxlength="5"> <h3 class="hidden" id="plustimer" style="font-size: 20px;"> ➔ </h3> <input type="text" name="time_to" class="hidden" id="time_to" value="00:00" maxlength="5">
+                </div>
+        
+                <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
+            
+                <div class="billable" id="billable">$</div>
+            </div>
         </div>
-
-        <div class="timer" id="timer">
-            <h3 class="displaying" id="playertimer">0:00:00</h3>
-            <input type="text" name="time_from" id="time_from" class="hidden" value="00:00" maxlength="5"> <h3 class="hidden" id="plustimer" style="font-size: 20px;"> ➔ </h3> <input type="text" name="time_to" class="hidden" id="time_to" value="00:00" maxlength="5">
-        </div>
-
-        <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
-    
-        <div class="billable" id="billable">$</div>
     </div>
 </div>
