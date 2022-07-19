@@ -55,10 +55,6 @@ def delete_task(task_id: int, unit_of_work: UnitOfWork = Provide[Container.user_
 #     start_time = trac
 
 
-
-
-
-
 def post_task(data, tracked_user_id):
     """Make task from post form"""
 

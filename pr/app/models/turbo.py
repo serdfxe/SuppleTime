@@ -1,3 +1,4 @@
-from turbo_flask import Turbo
+# from turbo_flask import Turbo
+from flask_socketio import SocketIO
 
-turbo = Turbo()
+turbo = SocketIO(engineio_logger=True, logger=True)

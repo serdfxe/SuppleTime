@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
 
-# from SuppleTime.pr.app.models.turbo import turbo
+from SuppleTime.pr.app.models.turbo import turbo
 
 from datetime import datetime
 
@@ -12,9 +12,15 @@ from SuppleTime.pr.app.containers import Container
 from SuppleTime.pr.app.models.user.services import *
 
 
+
 main = Blueprint("main", __name__)
 
 container = Container()
+
+
+# @turbo.user_id
+# def get_user_id():
+#     return current_user.id
 
 
 @main.route("/", methods=['GET', 'POST'])
@@ -81,6 +87,18 @@ def tracker_route():
 @login_required
 def profile_route():
     return render_template("main/account.html", sidebar_components=sidebar_components, current="account", url_for_sidebar_components=url_for_sidebar_components, content=content["account"], name=current_user.name)
+
+
+# @main.route("/main", methods=["GET"])
+# def turbo_route():
+#     return render_template("main.html")
+
+
+# @main.route("/form", methods=["POST"])
+# def form_route():
+#     with current_app.app_context():
+#         turbo.push(turbo.replace(render_template('inner.html', now=datetime.now().strftime("%H:%M:%S")), "time"), to=current_user.id)
+#     return ""
 
 
 @main.route("/<s>", methods=['GET', 'POST'])

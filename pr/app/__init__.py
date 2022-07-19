@@ -1,11 +1,12 @@
 from flask import Flask
 
-# from turbo_flask import Turbo
+from turbo_flask import Turbo
 
 from SuppleTime.pr.app.views.main import main
 from SuppleTime.pr.app.views.admin import admin
 from SuppleTime.pr.app.views.auth import auth
 from SuppleTime.pr.app.views.root import root
+from SuppleTime.pr.app.views.socket import socket
 
 from SuppleTime.pr.app.models.user.login_manager import login_manager
 from SuppleTime.pr.app.models.turbo import turbo
@@ -30,12 +31,13 @@ def create_app():
     app.secret_key = b'sheeeeeeeeeesh'
     
     login_manager.init_app(app)
-    # turbo.init_app(app)
+    turbo.init_app(app)
 
     app.register_blueprint(root)
     app.register_blueprint(main, url_prefix='/app')
     app.register_blueprint(admin, url_prefix='/admin')
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(socket, url_prefix='/sock')
     
 
-    return app
+    return turbo, app

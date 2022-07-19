@@ -57,7 +57,7 @@
 
     let tagbutton = document.getElementById("tagbutton");
     let tagbuttonpath = document.getElementById("tagbuttonpath");
-    let billable = document.getElementById("billable");
+    let billable = document.getElementsByClassName("billable");//document.getElementById("billable");
 
     let forms = document.getElementById("forms")
     // let player = document.getElementById("player");
@@ -73,7 +73,8 @@
     topbutton.style.background = "var(--dark-dominant-color)";
     bottombutton.style.background = "var(--h2)";
     {% if state["billable"] %}
-        billable.style.color = "var(--complement-color)"
+        billable[0].style.color = "var(--complement-color)"
+        billable[1].style.color = "var(--complement-color)"
     {% endif %}
 
     topbutton.onclick = function(){
@@ -100,13 +101,18 @@
         tagbuttonpath.style.fill = "var(--h2)";
     }
 
-    billable.onclick = function() {
-        if (billable.style.color != "var(--complement-color)") {
-            billable.style.color = "var(--complement-color)"
+    function onbillclick() {
+        if (billable[0].style.color != "var(--complement-color)") {
+            billable[0].style.color = "var(--complement-color)"
+            billable[1].style.color = "var(--complement-color)"
         } else {
-            billable.style.color = "var(--h2)"
+            billable[0].style.color = "var(--h2)"
+            billable[1].style.color = "var(--h2)"
         }
     }
+
+    billable[0].onclick = onbillclick;
+    billable[1].onclick = onbillclick;
 
     let playerbutton = document.getElementById("playerbutton")
 
@@ -115,7 +121,7 @@
         form.method = "post"
         form.action = "/app/tracker/post_task"
 
-        l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["billable", billable.style.color != "var(--complement-color)"]]
+        l = [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["billable", billable[0].style.color != "var(--complement-color)"]]
 
         for (let i = 0; i < l.length; i++) {
             inp = document.createElement("input")
@@ -138,7 +144,7 @@
         form.method = "post"
         form.action = "/app/tracker/start"
 
-        l = [["name", document.getElementById("task_name").value], ["billable", billable.style.color != "var(--complement-color)"]]
+        l = [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color != "var(--complement-color)"]]
 
         for (let i = 0; i < l.length; i++) {
             inp = document.createElement("input")
