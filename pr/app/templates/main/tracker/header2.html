@@ -63,7 +63,6 @@
         </div>
     </div>
     <script>
-        state = "none"
         //vars
         let topbutton = document.getElementById("topbutton");
         let bottombutton = document.getElementById("bottombutton");
@@ -101,20 +100,20 @@
         //post func
         function post(url, params) {
             const data = new URLSearchParams();
-            for (let i = 0; i < params.length; i++) {
-                data.append(params[i][0], params[i][1]);
+            for (let i in params) {
+                data.append(i[0], i[1]);
             }
             fetch("https://suppletime.ru"+url, {method: "POST", body:data})
         }
 
         function post_task() {
-            post("/app/tracker/post_task", [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["billable", billable[0].style.color == "var(--complement-color)"]])
+            post("/app/tracker/post_task", [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["billable", billable[0].style.color != "var(--complement-color)"]])
         }
 
         function post_start() {
-            socket.emit("start", [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color == "var(--complement-color)"]])
+            socket.emit("start", [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color != "var(--complement-color)"]])
             return
-            post("/app/tracker/start", [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color == "var(--complement-color)"]]);
+            post("/app/tracker/start", [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color != "var(--complement-color)"]]);
         }
 
         function post_pause() {
@@ -127,78 +126,41 @@
 
 
         //func
-        plus_button.addEventListener('click', post_task);
-
-        let start_timer_from_time = function (start_time) {
-
-            state = "track"
-
-            let x = setInterval(function(){
-                playertimer.textContent = new Date(new Date() - start_time).toTimeString().split(' ')[0];
-                if (state != "track") {
-                    clearInterval(x);
-                    if (state != "pause") {
-                        playertimer.textContent = "00:00:00";
-                    }
-                    
-                }
-            }, 1000);
-
-            // document.getElementById("stop-button").addEventListener('click', post_tracked_task);
-
-            // document.getElementById("stop-button").onclick = function () {
-            //     state = "none"
-            //     post_tracked_task();
-            //     track_button.onclick = undefined;
-            //     track_button.removeEventListener('click', post_pause);
-            //     track_button.addEventListener('click', post_start);
-            // }
-            
-            track_button.removeEventListener('click', post_start);
-            track_button.addEventListener('click', post_pause);
-
-            // track_button.onclick = function () {
-            //     state = "pause"
-            //     post_pause();
-            //     track_button.onclick = undefined;
-            //     track_button.removeEventListener('click', post_pause);
-            //     track_button.addEventListener('click', post_start);
-            // }
+        plus_button.onclick = function () {
+            post_task();
         }
 
-        function onload(data) {
-            state = data.state;
-            bill = state.bill;
+        let start_timer_from_time = function (start_time) {
+            track_button.onclick = post_pause;
+            document.getElementById("stop-button").onclick = post_tracked_task;
+            let x = setInterval(function(){
+                playertimer.textContent = new Date(new Date() - start_time).toTimeString().split(' ')[0];
+            }, 1000);
+        }
+
+        function track_button_click () {
+            if (state == "none") {
+                post_start();
+            } else if (state == "pause") {
+                post_start();
+            }
+        }
+
+        track_button.onclick = track_button_click;
+
+        function onload() {
+            //state
+            state = "{{state['state']}}";
 
             billable[0].style.color = "var(--complement-color)"
             billable[1].style.color = "var(--complement-color)"
 
-            if (!bill) {
+            {% if not state["billable"] %}
                 billable[0].style.color = "var(--h2)"
                 billable[1].style.color = "var(--h2)"
-            }
-
-            if (state == "none") {
-                document.getElementById("start").classList.remove("hidden");
-                document.getElementById("start").classList.add("displaying");
-
-                document.getElementById("pause").classList.add("hidden");
-                document.getElementById("pause").classList.remove("displaying");
-
-                document.getElementById("stop-button").classList.add("hidden");
-                document.getElementById("stop-button").classList.remove("stop-button");
-
-                playertimer.textContent = "00:00:00";
-
-                track_button.removeEventListener('click', post_pause);
-                track_button.addEventListener('click', post_start);
-            }
+            {% endif %}
 
             if (state == "track") {
-                hour = data.hour;
-                minute = data.minute;
-                second = data.second;
-
                 document.getElementById("start").classList.add("hidden");
                 document.getElementById("start").classList.remove("displaying");
 
@@ -209,18 +171,14 @@
                 document.getElementById("stop-button").classList.add("stop-button");
 
                 start_time = new Date();
-
-                track_button.removeEventListener('click', post_start);
-                track_button.addEventListener('click', post_pause);
-
-                start_time.setHours(hour + 3);
-                start_time.setMinutes(minute);
-                start_time.setSeconds(second);
+                {% if state["state"] == "track" %}
+                    start_time.setHours({{state["start_time"].hour}} + 3);
+                    start_time.setMinutes({{state["start_time"].minute}});
+                    start_time.setSeconds({{state["start_time"].second + state["pause_time"]}});
+                {% endif %}
 
                 start_timer_from_time(start_time);
             } else if (state == "pause") {
-                time = data.time;
-
                 document.getElementById("start").classList.remove("hidden");
                 document.getElementById("start").classList.add("displaying");
 
@@ -230,25 +188,23 @@
                 document.getElementById("stop-button").classList.remove("hidden");
                 document.getElementById("stop-button").classList.add("stop-button");
 
-                playertimer.textContent = time;
+                {% if state["state"] == "pause" %}
+                    playertimer.textContent = "{{state['time']}}"
+                {% endif %}
 
-                console.log("time: "+time);
-
-                track_button.removeEventListener('click', post_pause); 
-                track_button.addEventListener('click', post_start);
-
-                document.getElementById("stop-button").addEventListener('click', post_tracked_task);
+                document.getElementById("stop-button").onclick = function () {
+                        post_tracked_task();
+                }
             }
         }
-
-        socket.on('change_state', function(data){
-            state = data.state;
-            console.log(data);
-            onload(data);
-        });
-
-        console.log("loading")
-
-        socket.emit("state")
+        // state = "{{state['state']}}";
+        // bill = "{{state['billable']}}";
+        // hour = {{state["start_time"].hour}};
+        // {% if state %}
+        // second = {{state["start_time"].second + state["pause_time"]}};
+        // minute = {{state["start_time"].minute}};
+        // time = "{{state['time']}}";
+        //onload(state, bill, hour, minute, second, time);
+        onload();
     </script>
 </div>

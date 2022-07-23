@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, UniqueConstraint, DateTime, Boolean
+from sqlalchemy import Column, String, Integer, ForeignKey, UniqueConstraint, DateTime, Boolean, BigInteger
 from sqlalchemy.orm import relationship
 
 from SuppleTime.pr.app.database import Base
@@ -10,9 +10,20 @@ class Workspaces(Base):
     
     id = Column(Integer, primary_key = True, autoincrement = True, unique=True)
     name = Column(String(120))
-    ownerid = Column(Integer, ForeignKey(User.id), primary_key = True) #This should be foreign_key to user.id
+    ownerid = Column(Integer, ForeignKey(User.id), unique = True) #This should be foreign_key to user.id
 
-    #tracked_tasks = relationship("Tracked_tasks")
+    # tracked_tasks = relationship("Tracked_tasks")
+    # tags = relationship("Tags")
+    # workspaces_members = relationship("Workspaces_members")
+    
+    
+class Workspaces_members(Base):
+    __tablename__ = "workspaces_members"
+    
+    workspace_id = Column(Integer, ForeignKey(Workspaces.id), primary_key = True)
+    user_id = Column(Integer, ForeignKey(User.id), primary_key = True)####
+    role = Column(String(120))
+    
     
     
 class Tracked_tasks(Base):
@@ -28,6 +39,15 @@ class Tracked_tasks(Base):
     billable = Column(Boolean)
     pause_time = Column(Integer) #time in seconds
     
+    tracked_tasks_tags = relationship("Tracked_tasks_tags")
+    
+    
+class Tracked_tasks_tags(Base):
+     __tablename__ = "tracked_tasks_tags"
+    
+     tag_id = Column(BigInteger, ForeignKey("tags.id"))
+     tracked_tasks_id = Column(Integer, ForeignKey(Tracked_tasks.id), primary_key = True)
+    
     
 class Trackers(Base):
     __tablename__ = "trackers"
@@ -39,3 +59,24 @@ class Trackers(Base):
     start_time = Column(DateTime)
     billable = Column(Boolean)
     name = Column(String(120))
+    
+    
+class Trackers_tags(Base):
+    __tablename__ = "trackers_tags"
+    
+    user_id = Column(Integer, ForeignKey(User.id), primary_key = True, unique = True)
+    tag_id = Column(BigInteger, ForeignKey("tags.id"))
+    
+    
+class Tags(Base):
+    __tablename__ = "tags"
+    
+    id = Column(Integer, primary_key = True, autoincrement = True, unique = True)
+    workspace_id = Column(Integer, ForeignKey(Workspaces.id))
+    name = Column(String(120))
+    color = Column(String(30))
+
+    tracked_tasks_tags = relationship("Tracked_tasks_tags")
+    trackers_tags = relationship("Trackers_tags")
+    
+    

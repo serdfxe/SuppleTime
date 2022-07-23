@@ -18,11 +18,14 @@
                             <path d="M2.52192 21.3333C3.50376 21.3333 4.2997 20.5374 4.2997 19.5556C4.2997 18.5737 3.50376 17.7778 2.52192 17.7778C1.54008 17.7778 0.744141 18.5737 0.744141 19.5556C0.744141 20.5374 1.54008 21.3333 2.52192 21.3333Z" fill="#9B9CA6"/>
                         </svg>
                         <div class="dropdown-content">
-                            <form action="tracker/delete_task" method="post"><input type="hidden" name="task_id" value="{{i[5]}}"> <input type="submit" value="удалить"></form>
+                            <button onclick="post('/app/tracker/delete_task', [['task_id', {{i[5]}}]])">удалить</button>
                         </div>
                     </div>
                 </div>
             </li>
         {% endfor %}
     </ul>
+    <script>
+
+    </script>
 </div>

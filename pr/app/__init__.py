@@ -40,4 +40,4 @@ def create_app():
     app.register_blueprint(socket, url_prefix='/sock')
     
 
-    return turbo, app
+    return app

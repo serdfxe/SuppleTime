@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turbo</title>
+</head>
+<body>
+    <p>Dinamic update:</p>
+    {% include "socket/inner.html" %}
+    <form action="/turbo/form" id="form" method="post">
+        <label>1</label>
+        <input type="text" name="text1" id="txt1">
+        <label>2</label>
+        <input type="text" name="text2" id="txt2">
+        <button id="submit">Send</button>
+    </form>
+</body>
+{{ turbo()|safe }}
+<script>
+    let btn = document.getElementById("submit")
+
+    btn.onclick = function() {
+        let form = document.getElementById("form")
+        const xhr = new XMLHttpRequest();
+        // const formData = '?text1=' + document.getElementById("txt1").value + '&text2=' + document.getElementById("txt2").value;
+        xhr.open('POST', form.action);
+        xhr.send("")
+    }
+
+
+    function replaceTargetWith( targetID, html ){
+        var i, tmp, elm, last, target = document.getElementById(targetID);
+        tmp = document.createElement(html.indexOf('<td')!=-1?'tr':'div');
+        tmp.innerHTML = html;
+        i = tmp.childNodes.length;
+        last = target;
+        while(i--){
+            target.parentNode.insertBefore((elm = tmp.childNodes[i]), last);
+            last = elm;
+        }
+        target.parentNode.removeChild(target);
+    }
+</script>
+</html>

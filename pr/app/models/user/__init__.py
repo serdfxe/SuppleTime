@@ -11,18 +11,20 @@ class User(UserMixin, Base):
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     name = Column(String(120))
-    email = Column(String(120), primary_key=True)
+    email = Column(String(120), unique = True)
 
     confirm_users = relationship("ConfirmUser", back_populates="users", uselist=False)
     workspaces = relationship("Workspaces")
     trackers = relationship("Trackers")
+    workspaces_members = relationship("Workspaces_members")
+    trackers_tags = relationship("Trackers_tags")
 
 
 class ConfirmUser(Base):
     __tablename__ = 'confirm_users'
 
     id = Column(Integer, ForeignKey(User.id), primary_key=True, unique=True)
-    token = Column(String(120), primary_key=True)
+    token = Column(String(120), unique=True)
     password_hash = Column(String(120))
 
     users = relationship("User", back_populates="confirm_users")
@@ -31,8 +33,8 @@ class ConfirmUser(Base):
 class NonConfirmedUser(Base):
     __tablename__ = 'non_comfirm_users'
 
-    id = Column(Integer, primary_key=True, unique=True)
-    email = Column(String(120), primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    email = Column(String(120), unique=True)
     password_hash = Column(String(120))
     confirm_token = Column(String(120), unique=True)
 

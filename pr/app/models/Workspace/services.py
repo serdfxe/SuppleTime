@@ -38,7 +38,7 @@ def create_task(name: str, date_one: datetime, date_two: datetime, tracked_user_
 @inject
 def delete_task(task_id: int, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     """Delelete task by id"""
-    if task_id:
+    if task_id or task_id==0:
         with unit_of_work as uow:
             uow.repository.session.query(Tracked_tasks).filter_by(id=task_id).delete()
             uow.commit()
@@ -199,11 +199,12 @@ def get_tracker_state(user_id: int, repository: Repository = Provide[Container.u
             return {"state": "none", "name": ""}
         elif tracker.state == "track":
             return {
-                "state": tracker.state, 
-                "start_time": tracker.start_time,
+                "state": tracker.state,
+                "hour": tracker.start_time.hour,
+                "second": tracker.start_time.second + tracker.pause_time,
+                "minute": tracker.start_time.minute,
                 "name": tracker.name,
-                "billable": tracker.billable, 
-                "pause_time": tracker.pause_time
+                "bill": tracker.billable,
             }
         elif tracker.state == "pause":
             time = tracker.pause_start_time - tracker.start_time
@@ -227,7 +228,7 @@ def get_tracker_state(user_id: int, repository: Repository = Provide[Container.u
                 "state": tracker.state,
                 "time": time,
                 "name": tracker.name,
-                "billable": tracker.billable
+                "bill": tracker.billable
             }
         #return {"state": tracker.state, "start_time": tracker.start_time, "name": tracker.name, "billable": tracker.billable, "time": get_time_by_start_and pause}
 

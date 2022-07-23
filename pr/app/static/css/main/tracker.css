@@ -261,6 +261,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     border-radius: 10px;
     border: solid 1px var(--complement-color);
     width: 180px;
+    height: 41px;
     padding: 10px 0;
 }
 
@@ -465,7 +466,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px var(--h2) solid;
+    border-bottom: 1px var(--h2) solid;
 }
 
 .daylist ul li .task_and_tags {
@@ -475,8 +476,8 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
 }
 
 .daylist ul li .task_and_tags h1 {
-    font-weight: 400;
-    font-size: 30px;
+    font-weight: 300;
+    font-size: 25px;
     color: var(--h2);
 }
 
@@ -524,11 +525,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     border: var(--complement-color) 1px solid;
 }
 
-.dropdown-content form {
-    margin: 0;
-}
-
-.dropdown-content input[type="submit"] {
+.dropdown-content button {
     border: none;
     display: block;
     padding: 5 0 5 0;
@@ -543,7 +540,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
 
 .dropdown:hover .dropdown-content {display: block;}
 
-.dropdown-content input[type="submit"]:hover {background-color: var(--light-complement-color);}
+.dropdown-content button:hover {background-color: var(--light-complement-color);}
 
 ::-webkit-scrollbar {
     width: 5px;

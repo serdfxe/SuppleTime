@@ -182,7 +182,7 @@ def delete_user(id: int, unit_of_work: UnitOfWork = Provide[Container.user_uow])
 @inject
 def create_nonconfirmed_user(email, password, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     with unit_of_work as uow:
-        nonconfirmeduser = NonConfirmedUser(id=len(get_all_nonconfirmedusers()) + 1, email=email, password_hash=get_password_hash(password), confirm_token=generate_token())
+        nonconfirmeduser = NonConfirmedUser(email=email, password_hash=get_password_hash(password), confirm_token=generate_token())
         uow.repository.save(nonconfirmeduser)
 
         uow.commit()

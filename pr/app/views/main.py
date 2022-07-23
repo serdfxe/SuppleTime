@@ -11,6 +11,8 @@ from SuppleTime.pr.app.config import *
 from SuppleTime.pr.app.containers import Container
 from SuppleTime.pr.app.models.user.services import *
 
+from SuppleTime.pr.app.models.turbo import turbo
+
 
 
 main = Blueprint("main", __name__)
@@ -43,20 +45,58 @@ def post_task_route():
     tracked_user_id = current_user.id
     mes = post_task(request.form, tracked_user_id)
     flash(*mes)
-    return redirect(url_for("main.tracker_route"))
+
+    state = get_tracker_state(current_user.id)
+    turbo.socket.emit("change_state", state, to=current_user.id)
+    # turbo.replace(target="", content=, to=current_user.id)
+    return ""
+    # return redirect(url_for("main.tracker_route"))
 
 
 @main.route("tracker/post_tracked_task", methods=["POST"])
 def post_tracked_task_route():
     tracked_user_id = current_user.id
     stop_tracker(tracked_user_id)
-    return redirect(url_for("main.tracker_route"))
+
+    state = get_tracker_state(current_user.id)
+    # turbo.replace(target="header", content=render_template("main/tracker/header.html", state=state), to=current_user.id)
+    turbo.socket.emit("change_state", state, to=current_user.id)
+    
+    tasks = get_all_users_tasks_by_date(current_user.id, datetime.now())
+    turbo.replace(target="daylist", content=render_template("main/tracker/list.html", tracked_tasks=tasks), to=current_user.id)
+    return ""
+    # tracked_user_id = current_user.id
+    # stop_tracker(tracked_user_id)
+    # return redirect(url_for("main.tracker_route"))
 
  
 @main.route("tracker/pause", methods=["POST"])
 def pause_route():
     pause_tracker(current_user.id)
+    state = get_tracker_state(current_user.id)
+    # turbo.replace(target="header", content=render_template("main/tracker/header.html", state=state), to=current_user.id)
+    turbo.socket.emit("change_state", state, to=current_user.id)
+    return ""
     return redirect(url_for("main.tracker_route"))
+
+
+@turbo.socket.on("start")
+def start_r(data):
+    data = request.form
+    name = data.get("name")
+    billable = data.get("billable")
+    start_tracker(current_user.id, name if name else "", True if billable else False)
+    state = get_tracker_state(current_user.id)
+    turbo.socket.emit("change_state", state, to=current_user.id)
+    # turbo.replace(target="header", content=render_template("main/tracker/header.html", state=state), to=current_user.id)
+    return ""
+
+
+@turbo.socket.on("state")
+def state_geter():
+    state = get_tracker_state(current_user.id)
+    turbo.socket.emit("change_state", state, to=current_user.id)
+    return state
 
 
 @main.route("tracker/start", methods=["POST"])
@@ -65,19 +105,26 @@ def start_route():
     name = data.get("name")
     billable = data.get("billable")
     start_tracker(current_user.id, name, True if billable else False)
+    state = get_tracker_state(current_user.id)
+    turbo.replace(target="header", content=render_template("main/tracker/header.html", state=state), to=current_user.id)
+    return ""
     return redirect(url_for("main.tracker_route"))
 
 
 @main.route("tracker/delete_task", methods=["POST"])
 def delete_task_route():
+    turbo.socket.emit("mess", str(request.form))
     mes = delete_task(request.form.get("task_id"))
     flash(*mes)
-    return redirect(url_for("main.tracker_route"))
+    tasks = get_all_users_tasks_by_date(current_user.id, datetime.now())
+    turbo.replace(target="daylist", content=render_template("main/tracker/list.html", tracked_tasks=tasks), to=current_user.id)
+    return ""
 
 
 @main.route("/tracker", methods=["GET"])    
 @login_required
 def tracker_route():
+    # return render_template("main/tracker/tracker.html")
     tasks = get_all_users_tasks_by_date(current_user.id, datetime.now())
     state = get_tracker_state(current_user.id)
     return render_template("main/tracker/tracker.html", tracked_tasks=tasks, sidebar_components=sidebar_components, current="tracker", url_for_sidebar_components=url_for_sidebar_components, content=content["account"], name=current_user.name, state=state)
@@ -87,18 +134,6 @@ def tracker_route():
 @login_required
 def profile_route():
     return render_template("main/account.html", sidebar_components=sidebar_components, current="account", url_for_sidebar_components=url_for_sidebar_components, content=content["account"], name=current_user.name)
-
-
-# @main.route("/main", methods=["GET"])
-# def turbo_route():
-#     return render_template("main.html")
-
-
-# @main.route("/form", methods=["POST"])
-# def form_route():
-#     with current_app.app_context():
-#         turbo.push(turbo.replace(render_template('inner.html', now=datetime.now().strftime("%H:%M:%S")), "time"), to=current_user.id)
-#     return ""
 
 
 @main.route("/<s>", methods=['GET', 'POST'])
