@@ -1,4 +1,6 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+
+from random import randint
 
 from dependency_injector.wiring import inject, Provide
 from SuppleTime.pr.app.containers import Container
@@ -8,11 +10,24 @@ from SuppleTime.pr.app.database.repository import Repository
 
 from SuppleTime.pr.app.models.Workspace import *
 
+from SuppleTime.pr.app.config import *
+
+
 
 @inject
-def create_workspace(user_id: int, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+def create_workspace(user_id: int, name="default", unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     """Create workspace for user by id after registration"""
-    pass
+    with unit_of_work as uow:
+        workspace = Workspaces(ownerid=user_id, name=name)
+        uow.repository.save(workspace)
+        uow.commit()
+        uow.repository.session.refresh(workspace)
+        uow.repository.session.expunge(workspace)
+
+        ws_m = Workspaces_members(workspace_id=workspace.id, user_id=user_id, role="owner")
+        uow.repository.save(ws_m)
+
+        uow.commit()
 
 
 @inject
@@ -46,6 +61,65 @@ def delete_task(task_id: int, unit_of_work: UnitOfWork = Provide[Container.user_
     return "Error", "error"
 
 
+@inject
+def is_user_in_ws(user_id: int, workspace_id: int, repository: Repository = Provide[Container.users_repository]) -> bool:
+    member = repository.session.query(Workspaces_members).filter_by(user_id=user_id, workspace_id=workspace_id).first()
+    return True if member else False
+
+
+@inject
+def get_users_default_ws(user_id: int, repository: Repository = Provide[Container.users_repository]) -> int:
+    ws = repository.session.query(Workspaces).filter_by(ownerid=user_id, name="default").first()
+    return ws
+
+
+@inject
+def create_tag(workspace_id: int, name: str, uow: UnitOfWork = Provide[Container.user_uow]) -> bool:
+    with uow:
+        tag = Tags(workspace_id=workspace_id, name=name, color="119 128 255")
+        uow.repository.save(tag)
+
+        uow.commit()
+
+        return True
+
+
+@inject
+def add_tag_to_tracker(user_id: int, tag_id: int, uow: UnitOfWork = Provide[Container.user_uow]) -> bool:
+    with uow:
+        rep = uow.repository.session
+
+        tag = rep.query(Tags).filter_by(id=tag_id).first()
+        if not tag: return False
+
+        member = Trackers_tags(user_id=user_id, tag_id=tag.id)
+        uow.repository.save(member)
+
+        uow.commit()
+
+        return True
+
+
+@inject
+def get_all_trackers_tags(user_id: int, repository: Repository = Provide[Container.users_repository]):
+    rep = repository.session
+    l = rep.query(Trackers_tags).filter_by(user_id=user_id).all()
+
+    return [{"name": i.tags.name, "color": [int(j) for j in i.tags.color.split(" ")]} for i in l] 
+
+
+@inject
+def get_all_ws_tags(workspace_id: int, repository: Repository = Provide[Container.users_repository]):
+    rep = repository.session
+    l = rep.query(Tags).filter_by(workspace_id=workspace_id).all()
+
+    return [{"name": i.name, "color": [int(j) for j in i.color.split(" ")]} for i in l] 
+
+
+def get_all_users_tags(user_id: int):
+    return get_all_ws_tags(get_users_default_ws(user_id).id)
+
+
 # @inject
 # def post_tracked_task(data, tracked_user_id, repository: Repository = Provide[Container.users_repository]):
 #     name = data.get("name")
@@ -55,20 +129,31 @@ def delete_task(task_id: int, unit_of_work: UnitOfWork = Provide[Container.user_
 #     start_time = trac
 
 
-def post_task(data, tracked_user_id):
+#--------------------- Временно ---------------------#
+
+def get_list_colors(color):
+    return (color,  [i - 16 for i in color], [i - 26 for i in color])
+
+def rand_color():
+    return color_list[randint(0, len(color_list) - 1)]
+
+#--------------------- Временно ---------------------#
+
+
+@inject
+def post_task(data, tracked_user_id, repository: Repository = Provide[Container.users_repository]):
     """Make task from post form"""
 
     name = data.get("name")
 
     date_one = data.get("date_one")
     date_two = data.get("date_two")
-    
-    billable = True if data.get("billable") else False
 
     now = datetime.now()
 
-    if not date_one or not date_two or not name: return "Invalid inputs", "error"
+    if not date_one or not date_two: return "Invalid inputs", "error"
     date_one = date_one.split(":")
+    if not name: name = ''
 
     try:
         date_one = now.replace(hour=int(date_one[0]), minute=int(date_one[1]))
@@ -83,7 +168,17 @@ def post_task(data, tracked_user_id):
             return "Error", "error"
         
     if date_one >= date_two: return "Invalid time", "error"
+
+    billable = tracker = repository.session.query(Trackers).filter_by(user_id=tracked_user_id).first().billable
     
+    if data.get("date") and data.get("date") != '':
+        y, m, d = data.get("date").split("-")
+        y = int(y)
+        d = int(d)
+        m = int(m)
+        date_one = date_one.replace(day=d, year=y, month=m)
+        date_two = date_two.replace(day=d, year=y, month=m)
+
     create_task(name, date_one, date_two, tracked_user_id, billable)
 
     return "Success", "success"
@@ -104,16 +199,36 @@ def get_differ_time_with_sec(t1: datetime, t2: datetime, sec: int) -> str:
     hours = delta // 3600
     minutes = str(delta // 60 - hours*60)
     if len(minutes) == 1: minutes = "0"+minutes
-    return f"{hours}:{minutes}"
+    time = f"{hours}:{minutes}"
+    if time == "0:00": return "<1 мин"
+    return time
+
+
+@inject
+def get_tags_by_task_id(id: int,  repository: Repository = Provide[Container.users_repository]):
+    return {"Тег 1": rand_color(), "Тег 2": rand_color()}
 
 
 @inject
 def get_all_users_tasks_by_date(user_id: int, date: datetime, repository: Repository = Provide[Container.users_repository]):
     start = date.replace(hour=0, minute=0, second=0, microsecond=0)
-    end = start.replace(day=start.day+1)
+    end = start + timedelta(days=1)
     l = repository.session.query(Tracked_tasks).filter(Tracked_tasks.tracked_user_id == user_id, Tracked_tasks.date_one >= start, Tracked_tasks.date_one <= end).all()
-    l = [(i.name, i.billable, i.date_one.strftime("%H:%M"), i.date_two.strftime("%H:%M"), get_differ_time_with_sec(i.date_one, i.date_two, i.pause_time), i.id) for i in l]
-    return l
+    # l = [(i.name, i.billable, i.date_one.strftime("%H:%M"), i.date_two.strftime("%H:%M"), get_differ_time_with_sec(i.date_one, i.date_two, i.pause_time), i.id) for i in l]
+    tasks = []
+    for i in l: 
+        tasks.append(
+            {
+                "name": i.name,
+                "bill": i.billable, 
+                "from": i.date_one.strftime("%H:%M"), 
+                "to": i.date_two.strftime("%H:%M"), 
+                "time": get_differ_time_with_sec(i.date_one, i.date_two, i.pause_time), 
+                "id": i.id,
+                "tags": get_tags_by_task_id(i.id),
+            }
+        )
+    return tasks
 
 
 @inject
@@ -135,7 +250,7 @@ def get_differ_time(t1: datetime, t2: datetime) -> str:
     
 
 @inject
-def start_tracker(user_id: int, name = None, billable = False, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+def start_tracker(user_id: int, name = None, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
     with unit_of_work as uow:
         tracker = uow.repository.session.query(Trackers).filter_by(user_id=user_id).first()
     if tracker.state == "none":
@@ -146,7 +261,6 @@ def start_tracker(user_id: int, name = None, billable = False, unit_of_work: Uni
             tracker.pause_time = 0
             tracker.pause_start_time = None
             tracker.start_time = datetime.now()
-            tracker.billable = billable
             
             uow.commit()
         return None
@@ -192,11 +306,20 @@ def stop_tracker(user_id:int, unit_of_work: UnitOfWork = Provide[Container.user_
 
 
 @inject
+def change_billable(user_id:int, unit_of_work: UnitOfWork = Provide[Container.user_uow]):
+    with unit_of_work as uow:
+        tracker = uow.repository.session.query(Trackers).filter_by(user_id=user_id).first()
+        tracker.billable = not tracker.billable
+
+        uow.commit()
+
+
+@inject
 def get_tracker_state(user_id: int, repository: Repository = Provide[Container.users_repository]):
     tracker = repository.session.query(Trackers).filter_by(user_id=user_id).first()
     if tracker:
         if tracker.state == "none":
-            return {"state": "none", "name": ""}
+            return {"state": "none", "name": "", "bill": tracker.billable, "tags": get_all_trackers_tags(user_id)}
         elif tracker.state == "track":
             return {
                 "state": tracker.state,
@@ -204,7 +327,8 @@ def get_tracker_state(user_id: int, repository: Repository = Provide[Container.u
                 "second": tracker.start_time.second + tracker.pause_time,
                 "minute": tracker.start_time.minute,
                 "name": tracker.name,
-                "bill": tracker.billable,
+                "bill": tracker.billable, 
+                "tags": get_all_trackers_tags(user_id)
             }
         elif tracker.state == "pause":
             time = tracker.pause_start_time - tracker.start_time
@@ -228,7 +352,8 @@ def get_tracker_state(user_id: int, repository: Repository = Provide[Container.u
                 "state": tracker.state,
                 "time": time,
                 "name": tracker.name,
-                "bill": tracker.billable
+                "bill": tracker.billable,
+                "tags": get_all_trackers_tags(user_id)
             }
         #return {"state": tracker.state, "start_time": tracker.start_time, "name": tracker.name, "billable": tracker.billable, "time": get_time_by_start_and pause}
 

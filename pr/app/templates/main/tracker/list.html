@@ -1,31 +1,118 @@
 <div class="daylist" id="daylist">
-    <p>Сегодня</p>
+    <div class="list-header">
+        <h1>Сегодня</h1>
+        <input type="date" onchange="postChangeDay()" id="day" value="{{current_date}}">
+        <h2>Всего: 0:00</h2>
+    </div>
     <ul>
-        {% for i in tracked_tasks %}
-            <li>
-                <div class="task_and_tags">
-                    <h1>{{i[0]}}</h1>
-                    <h2>{{ ["•$", ""][i[1]] }}</h2>
-                </div>
+        {% if tracked_tasks.__len__() %}
+            {% for i in tracked_tasks %}
+                <li>
+                    <div class="task_and_tags">
+                        <h1>{{i["name"]}}</h1>
+                        <h2>{{ ["", "•$"][i["bill"]] }}</h2>
+                        <div class="tags">
+                            {% for ii in i["tags"] %}
+                                <div class="tag" style="background-color: rgb({{i['tags'][ii][0]}}, {{i['tags'][ii][1]}}, {{i['tags'][ii][2]}});">
+                                    <h1>{{ii}}</h1>
+                                </div>
+                            {% endfor %}
+                            <div class="tag-search-dropdown">
+                                <svg class="plus_tracked_tag" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                                    <path d="M9.23492 9.23539L15.9094 9.23576C16.3237 9.23576 16.6596 8.89988 16.6596 8.48556C16.6596 8.07122 16.3237 7.73533 15.9094 7.73535L9.23492 7.73568L9.23527 1.06124C9.23527 0.646903 8.89939 0.311019 8.48507 0.311035C8.07075 0.311052 7.73485 0.646919 7.73486 1.06124L7.73521 7.73568L1.06075 7.73535C0.646414 7.73535 0.310531 8.07124 0.310547 8.48556C0.310564 8.89988 0.646431 9.23578 1.06075 9.23576L7.73521 9.23539L7.73485 15.9099C7.73485 16.3242 8.07073 16.6601 8.48505 16.6601C8.89939 16.6601 9.23527 16.3242 9.23525 15.9099L9.23492 9.23539Z" fill="#58596B"/>
+                                    </svg>
 
-                <div class="task_info">
-                    <h1>{{i[2]}} ➔ {{i[3]}}</h1>
-                    <h2>{{i[4]}}</h2>
-                    <div class="dropdown">
-                        <svg class="dropbtn" xmlns="http://www.w3.org/2000/svg" width="5" height="22" viewBox="0 0 5 22" fill="none">
-                            <path d="M2.52192 3.55556C3.50376 3.55556 4.2997 2.75962 4.2997 1.77778C4.2997 0.795938 3.50376 0 2.52192 0C1.54008 0 0.744141 0.795938 0.744141 1.77778C0.744141 2.75962 1.54008 3.55556 2.52192 3.55556Z" fill="#9B9CA6"/>
-                            <path d="M2.52192 12.4444C3.50376 12.4444 4.2997 11.6485 4.2997 10.6667C4.2997 9.68483 3.50376 8.88889 2.52192 8.88889C1.54008 8.88889 0.744141 9.68483 0.744141 10.6667C0.744141 11.6485 1.54008 12.4444 2.52192 12.4444Z" fill="#9B9CA6"/>
-                            <path d="M2.52192 21.3333C3.50376 21.3333 4.2997 20.5374 4.2997 19.5556C4.2997 18.5737 3.50376 17.7778 2.52192 17.7778C1.54008 17.7778 0.744141 18.5737 0.744141 19.5556C0.744141 20.5374 1.54008 21.3333 2.52192 21.3333Z" fill="#9B9CA6"/>
-                        </svg>
-                        <div class="dropdown-content">
-                            <button onclick="post('/app/tracker/delete_task', [['task_id', {{i[5]}}]])">удалить</button>
+                                <div class="tag-search-content">
+                                    <div class="tag-search">
+                                        <input type="text">
+                                        <svg style="width: 30px; height: 30px;" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
-        {% endfor %}
+
+                    <div class="task_info">
+                        <h1>{{i["from"]}} ➔ {{i["to"]}}</h1>
+                        <h2>{{i["time"]}}</h2>
+                        <div class="dropdown">
+                            <svg class="dropbtn" xmlns="http://www.w3.org/2000/svg" width="5" height="22" viewBox="0 0 5 22" fill="none">
+                                <path d="M2.52192 3.55556C3.50376 3.55556 4.2997 2.75962 4.2997 1.77778C4.2997 0.795938 3.50376 0 2.52192 0C1.54008 0 0.744141 0.795938 0.744141 1.77778C0.744141 2.75962 1.54008 3.55556 2.52192 3.55556Z" fill="#9B9CA6"/>
+                                <path d="M2.52192 12.4444C3.50376 12.4444 4.2997 11.6485 4.2997 10.6667C4.2997 9.68483 3.50376 8.88889 2.52192 8.88889C1.54008 8.88889 0.744141 9.68483 0.744141 10.6667C0.744141 11.6485 1.54008 12.4444 2.52192 12.4444Z" fill="#9B9CA6"/>
+                                <path d="M2.52192 21.3333C3.50376 21.3333 4.2997 20.5374 4.2997 19.5556C4.2997 18.5737 3.50376 17.7778 2.52192 17.7778C1.54008 17.7778 0.744141 18.5737 0.744141 19.5556C0.744141 20.5374 1.54008 21.3333 2.52192 21.3333Z" fill="#9B9CA6"/>
+                            </svg>
+                            <div class="dropdown-content">
+                                <button onclick="post('/app/tracker/delete_task', [['task_id', {{i['id']}}]])">удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <h2>Пока задач нет...</h2>
+            </div>
+        {% endif %}
     </ul>
     <script>
+        if (document.getElementById("day").value == "") {
+            document.getElementById("day").value = new Date().toISOString().slice(0, 10)
+        }
 
+        l = document.getElementsByClassName("plus_tracked_tag")
+
+        for (let i = 0; i < l.length; i++){
+            l[i].addEventListener("click", ontagclick);
+        }
+
+        function exit(el) {
+            return function () {
+                el.style.display = "none";
+                window.onclick = undefined;
+            }
+        }
+
+        function ontagclick(btn) {
+            btn = btn.currentTarget;
+            let drop = btn.parentElement;
+            let drop_cont = drop.children[1];
+
+            console.log(btn)
+            console.log("tag!")
+
+            if (drop_cont.style.display != "flex") {
+                drop_cont.style.display = "flex";
+
+                socket.emit("tag_search", {"request": "yeees"})
+                console.log("search!")
+
+                drop_cont.onmouseout = function () {
+                    window.onclick = exit(drop_cont)
+                };
+
+                drop_cont.onmouseover = function () {
+                    window.onclick = undefined;
+                };
+            }
+        }
+
+        l = document.getElementsByClassName("create-tag-btn")
+
+        for (let i = 0; i < l.length; i++) {
+            l[i].addEventListener("click", function () {
+                let form = document.getElementById("tag-form")
+                form.style.display = "flex";
+                form.addEventListener("click", function (event) {
+                    if (event.target != event.currentTarget) {
+                        return
+                    }
+                    form.style.display = "none";
+                })
+            });
+        }
+
+        socket.on('tag_search', function(data){
+            console.log(data);
+        });
     </script>
 </div>

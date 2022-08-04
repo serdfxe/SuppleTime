@@ -1,0 +1,18 @@
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main/tag_form.css')}}">
+</head>
+<div id="tag-form">
+    <div class="form">
+        <h1>Новый тег</h1>
+        <input type="text" placeholder="Название тега..." id="tag-name">
+        <div class="tag-form-button" id="tag-form-button">Создать</div>
+    </div>
+</div>
+<script>
+    let post_tag_btn = document.getElementById("tag-form-button");
+    post_tag_btn.addEventListener("click", function () {
+        post("/app/create_tag", [["name", document.getElementById("tag-name").value]])
+        document.getElementById("tag-name").value = "";
+        document.getElementById("tag-form").style.display = "none";
+    })
+</script>

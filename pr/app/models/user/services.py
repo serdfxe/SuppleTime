@@ -212,7 +212,9 @@ def preregister_user(data) -> str:
 def final_register_user(user):
     delete_nonconfirmed_user(user.id)
     user = create_user(user.email.split("@")[0], user.email, user.password_hash)
+    create_workspace(user.id)
     create_tracker(user.id)
+    
     return user
 
 

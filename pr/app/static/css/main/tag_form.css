@@ -1,0 +1,75 @@
+:root {
+    --eror-color: #FB4952; 
+    --message-color: #36B879;
+    --dark-dominant-color: #101727;
+    --light-dominant-color: #F9F5F5;
+    --light-complement-color: #D9D9D9;
+    --complement-color: #58596B;
+    --light-complement-color: #D9D9D9;
+    --accent-color: #7780FF;
+    --light-accent-color: #E1E3FF;
+    --highlight-color: #222331;
+    --highlight-text-color: #EEF0FF;
+    --h2: #9D9D9D;
+    --h1: #FEFEFE;
+}
+
+#tag-form {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.35);
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    width: 300px;
+    background-color: var(--h1);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    padding: 20px 0 20px 0;
+}
+
+.form h1 {
+    font-size: 25px;
+    margin: 0;
+}
+
+.form input {
+    border-radius: 8px;
+    margin-top: 20px;
+    height: 40px;
+    font-size: 15px;
+    width: 86%;
+    padding: 0px 10px 0 10px;
+    border: 1px var(--complement-color) solid;
+}
+
+.form input:focus {
+    border: 1px var(--dark-dominant-color) solid;
+}
+
+.form input:focus-visible {
+    border: 1px var(--dark-dominant-color) solid;
+}
+
+.tag-form-button {
+    background-color: var(--accent-color);
+    border-radius: 8px;
+    padding: 10px 10px 0 10px;
+    height: 32px;
+    width: 80%;
+    text-align: center;
+    color: var(--h1);
+    font-weight: 400;
+    font-size: 15px;
+    margin-top: 20px;
+    cursor: pointer;
+}

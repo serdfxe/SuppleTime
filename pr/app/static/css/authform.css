@@ -117,7 +117,7 @@ canvas {
 h1 {
     padding: 0;
     margin: 0;
-    font-size: 55px;
+    font-size: 45px;
     color: var(--dark-dominant-color);
     z-index: 3;
     margin-top: 32px;
@@ -129,7 +129,7 @@ h2 {
     text-align: center;
     padding: 0;
     margin: 0;
-    font-size: 22px;
+    font-size: 20px;
     color: var(--h2);
     z-index: 3;
     margin-top: 20px;
@@ -153,7 +153,7 @@ form h2 {
 
 
 input[type="password"] {
-    border: 2.21px solid var(--h2);
+    border: 1px solid var(--h2);
     border-radius: 15px;
     width: calc(100% - 24px);
     height: 76px;
@@ -166,11 +166,15 @@ input[type="password"] {
 }
 
 input[type="password"]:focus {
-    border: 2.21px solid var(--highlight-color);
+    border: 1px solid var(--dark-dominant-color);
+}
+
+input[type="password"]:focus-visible {
+    border: 1px solid var(--dark-dominant-color);
 }
 
 input[type="text"] {
-    border: 2.21px solid var(--h2);
+    border: 1px solid var(--h2);
     border-radius: 15px;
     width: calc(100% - 24px);
     height: 76px;
@@ -183,13 +187,17 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border: 2.21px solid var(--highlight-color);
+    border: 1px solid var(--dark-dominant-color);
+}
+
+input[type="text"]:focus-visible {
+    border: 1px solid var(--dark-dominant-color);
 }
 
 
 .button {
     border: 0;
-    font-size: 28.74px;
+    font-size: 23px;
     color: var(--light-dominant-color);
     border-radius: 15px;
     width: 486px;
@@ -239,7 +247,7 @@ h3 {
 .submit_btn {
     margin: 0;
     margin-bottom: 36px;
-    font-size: 28.74px;
+    font-size: 23px;
     border-radius: 15px;
     width: 238px;
     height: 76px;
@@ -252,7 +260,7 @@ h3 {
 }
 
 .redirect_btn {
-    font-size: 28.74px;
+    font-size: 23px;
     border-radius: 15px;
     width: 238px;
     height: 76px;
@@ -261,7 +269,7 @@ h3 {
     justify-content: center;
     background-color: var(--h1);
     color: var(--h2);
-    border: 2.21px solid var(--h2);
+    border: 1px solid var(--h2);
     height: 71.58px;
     width: 233.58px;
 }
@@ -306,7 +314,7 @@ a {
     background-color: var(--h1);
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    border: 2.21px solid var(--h2);
+    border: 1px solid var(--h2);
 }
 
 .checkinput:checked + .checkbox {

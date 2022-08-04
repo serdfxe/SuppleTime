@@ -1,5 +1,9 @@
 <div class="header" id="header">
     <input type="text" name="search" id="task_name" placeholder="Введите задачу..." autocomplete="off" class="input__task" value="{{state['name']}}">
+
+    <div class="tracker_tags" id="tracker_tags">
+    </div>
+
     <div class="right-side">
         <div class="doublebuttonsback">
             <div class="topbutton" id="topbutton">
@@ -28,9 +32,13 @@
                     <h3 id="plustimer" style="font-size: 20px;"> ➔ </h3>
                     <input type="text" name="time_to" id="time_to" value="00:00" maxlength="5">
                 </div>
-        
-                <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
-            
+                <div class="tag-searchdropdown">
+                    <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton2" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
+                    <div class="tag-search-content">
+                        123
+                    </div>
+                </div>
+                
                 <div class="billable" id="billable">$</div>
             </div>
             <div class="track-form">
@@ -56,12 +64,33 @@
                     <input type="text" name="time_from" id="time_from" class="hidden" value="00:00" maxlength="5"> <h3 class="hidden" id="plustimer" style="font-size: 20px;"> ➔ </h3> <input type="text" name="time_to" class="hidden" id="time_to" value="00:00" maxlength="5">
                 </div>
         
-                <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
-            
+                <div class="tag-searchdropdown">
+                    <svg class="tagbutton" xmlns="http://www.w3.org/2000/svg" id="tagbutton1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path id="tagbuttonpath" fill="var(--h2)" d="M21.557,7.153L15.318,.964C14.547,.232,13.5-.105,12.447,.03L5.821,.905c-.821,.109-1.399,.862-1.291,1.684,.108,.822,.867,1.402,1.684,1.291l6.626-.875c.15-.02,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03,.007,2.793l-.512,.512c-.113-.145-.236-.285-.367-.419l-6.238-6.189c-.771-.732-1.819-1.07-2.871-.935l-6.626,.875c-.701,.093-1.242,.663-1.299,1.368l-.511,6.396c-.086,1.059,.307,2.086,1.054,2.795l6.086,6.035c.947,.967,2.214,1.5,3.567,1.501h.005c1.352,0,2.617-.53,3.564-1.494l3.278-3.333c.927-.944,1.401-2.178,1.421-3.421l1.579-1.579c1.896-1.929,1.898-5.072-.01-7.02Zm-5.13,9.917l-3.277,3.333c-.379,.386-.887,.598-1.428,.598-.542,0-1.049-.214-1.442-.616l-6.124-6.072c-.109-.104-.166-.25-.153-.402l.414-5.189,5.424-.716c.148-.024,.301,.028,.388,.112l6.201,6.152c.757,.773,.756,2.03-.002,2.802Zm-7.427-5.57c-.034,1.972-2.967,1.971-3,0,.034-1.972,2.967-1.971,3,0Z"/></svg>
+                    <div class="tag-search-content">
+                        <div class="tag-search">
+                            <input type="text">
+                            <svg style="width: 30px; height: 30px;" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/></svg>
+                        </div>
+                        <div class="tag-search-results">
+                            Ничего не найдено
+                        </div>
+                        <div class="create-tag-btn">
+                            + Создать тег
+                        </div>
+                    </div>
+                </div>
+
                 <div class="billable" id="billable">$</div>
             </div>
         </div>
     </div>
+
+    <template id="tag_sample">
+        <div class="tag">
+            <h1></h1>
+        </div>
+    </template>
+
     <script>
         state = "none"
         //vars
@@ -71,13 +100,67 @@
         let plus_button = document.getElementById("plus-button");
         let track_button = document.getElementById("track-button");
 
-        let tagbutton = document.getElementById("tagbutton");
+        let tagbutton1 = document.getElementById("tagbutton1");
+        let tagbutton2 = document.getElementById("tagbutton2");
+        let tagbtns = [tagbutton1, tagbutton2]
         let tagbuttonpath = document.getElementById("tagbuttonpath");
 
         let forms = document.getElementById("forms")
         let time_input_1 = document.getElementById("time_from");
         let time_input_2 = document.getElementById("time_to")
 
+        //tag
+        function exit(el) {
+            return function () {
+                el.style.display = "none";
+                window.onclick = undefined;
+            }
+        }
+
+        function ontagclick(btn) {
+            btn = btn.currentTarget;
+            let drop = btn.parentElement;
+            let drop_cont = drop.children[1];
+
+            console.log(btn)
+            console.log("tag!")
+
+            if (drop_cont.style.display != "flex") {
+                drop_cont.style.display = "flex";
+                socket.emit("tag_search", {"request": "yeees"})
+                drop_cont.onmouseout = function () {
+                    window.onclick = exit(drop_cont)
+                };
+                drop_cont.onmouseover = function () {
+                    window.onclick = undefined;
+                }
+            }
+
+            // drop_cont.style.display = ["block", "none"][drop_cont.style.display == "block"];
+        }
+
+        tagbtns[0].addEventListener("click", ontagclick);
+        tagbtns[1].addEventListener("click", ontagclick);
+
+        //up down / track plus
+        topbutton.style.background = "var(--dark-dominant-color)";
+        bottombutton.style.background = "var(--h2)";
+
+        topbutton.addEventListener("click", function(){
+            if (topbutton.style.background != "var(--dark-dominant-color)") {
+                bottombutton.style.background = "var(--h2)";
+                topbutton.style.background = "var(--dark-dominant-color)";
+                forms.style.animation = "form-change-to-track 0.5s 1 ease-in-out forwards"
+            }
+        });
+
+        bottombutton.addEventListener("click", function(){
+            if (topbutton.style.background == "var(--dark-dominant-color)") {
+                topbutton.style.background = "var(--h2)";
+                bottombutton.style.background = "var(--dark-dominant-color)";
+                forms.style.animation = "form-change-to-plus 0.5s 1 ease-in-out forwards"
+            }
+        });
 
         //billable style
         let billable = document.getElementsByClassName("billable")
@@ -92,6 +175,7 @@
                 billable[0].style.color = "var(--h2)"
                 billable[1].style.color = "var(--h2)"
             }
+            socket.emit("billable")
         }
 
         billable[0].onclick = onbillclick;
@@ -108,13 +192,11 @@
         }
 
         function post_task() {
-            post("/app/tracker/post_task", [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["billable", billable[0].style.color == "var(--complement-color)"]])
+            post("/app/tracker/post_task", [["date_one", time_input_1.value], ["date_two", time_input_2.value], ["name", document.getElementById("task_name").value], ["date", document.getElementById("day").value]])
         }
 
         function post_start() {
-            socket.emit("start", [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color == "var(--complement-color)"]])
-            return
-            post("/app/tracker/start", [["name", document.getElementById("task_name").value], ["billable", billable[0].style.color == "var(--complement-color)"]]);
+            socket.emit("start", {"name": document.getElementById("task_name").value})
         }
 
         function post_pause() {
@@ -123,6 +205,10 @@
 
         function post_tracked_task() {
             post("/app/tracker/post_tracked_task", [])
+        }
+
+        function postChangeDay() {
+            socket.emit("change_day", {"date": document.getElementById("day").value})
         }
 
 
@@ -143,37 +229,41 @@
                     
                 }
             }, 1000);
-
-            // document.getElementById("stop-button").addEventListener('click', post_tracked_task);
-
-            // document.getElementById("stop-button").onclick = function () {
-            //     state = "none"
-            //     post_tracked_task();
-            //     track_button.onclick = undefined;
-            //     track_button.removeEventListener('click', post_pause);
-            //     track_button.addEventListener('click', post_start);
-            // }
             
             track_button.removeEventListener('click', post_start);
             track_button.addEventListener('click', post_pause);
-
-            // track_button.onclick = function () {
-            //     state = "pause"
-            //     post_pause();
-            //     track_button.onclick = undefined;
-            //     track_button.removeEventListener('click', post_pause);
-            //     track_button.addEventListener('click', post_start);
-            // }
         }
 
         function onload(data) {
             state = data.state;
-            bill = state.bill;
+            bill = data.bill;
+
+            tags = data.tags
+
+            tags_div = document.getElementById("tracker_tags")
+
+            tag_sample = document.getElementById("tag_sample")
+
+            for (let i = 0; i < tags_div.children; i++) {
+                tags_div.children[i].remove()
+            }
+
+            for (let i = 0; i < tags; i++) {
+                let tag = tag_sample.content.cloneNode(true);
+
+                tag.style.background = "rgb("+ tags[i]["color"].join(", ") +")"
+                tag.children[0].textContent = tags[i]["name"];
+
+                tags_div.appendChild(tag)
+            }
+
+            console.log(bill)
 
             billable[0].style.color = "var(--complement-color)"
             billable[1].style.color = "var(--complement-color)"
 
             if (!bill) {
+                console.log("!bill")
                 billable[0].style.color = "var(--h2)"
                 billable[1].style.color = "var(--h2)"
             }
@@ -218,6 +308,8 @@
                 start_time.setSeconds(second);
 
                 start_timer_from_time(start_time);
+                
+                document.getElementById("stop-button").addEventListener('click', post_tracked_task);
             } else if (state == "pause") {
                 time = data.time;
 

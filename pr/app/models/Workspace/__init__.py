@@ -66,6 +66,8 @@ class Trackers_tags(Base):
     
     user_id = Column(Integer, ForeignKey(User.id), primary_key = True, unique = True)
     tag_id = Column(BigInteger, ForeignKey("tags.id"))
+
+    tags = relationship("Tags")
     
     
 class Tags(Base):

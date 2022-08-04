@@ -20,28 +20,36 @@
 }
 
 .flashes {
-    position: absolute;
+    position: fixed;
     z-index: 10;
-    width: 100%;
-    height: 100%;
+    width: 97%;
+    height: 90%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: flex-end;
     pointer-events: none;
+    margin-top: 300px;
+    transition: 1s;
 }
 
 .flashes div {
     pointer-events: auto;
+    transition: 1s;
     width: 300px;
     min-height: 60px;
-    margin-top: 10px;
+
+    margin-top: 100px;
+
+    margin-bottom: 10px;
     border-radius: 10px;
     margin-right: 10px;
-    color: var(--h1);
-    font-size: 10px;
+    /* color: var(--h1); */
+    color: var(--dark-dominant-color);
+    font-size: 7px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    filter: drop-shadow(0px 1px 10px rgba(0, 0, 0, 0.1));
 }
 
 .flashes div h1 {
@@ -55,31 +63,16 @@
 }
 
 .flashes .message {
-    background-color: var(--accent-color);
-}
-
-.flashes .message h2 {
-    color: #6770E5;
-    margin-right: 40px;
-    font-size: 70px;
+    background-color: var(--h1);
+    border: 1px solid var(--accent-color);
 }
 
 .flashes .error {
-    background-color: var(--eror-color);
-}
-
-.flashes .error h2 {
-    color: #F23842;
-    font-size: 66px;
-    margin-right: 25px;
+    background-color: var(--h1);
+    border: 1px solid var(--eror-color);
 }
 
 .flashes .success {
-    background-color: var(--message-color);
-}
-
-.flashes .success h2 {
-    color: #2DA069;
-    height: 100px;
-    line-height: 1;
+    background-color: var(--h1);
+    border: 1px solid var(--message-color);
 }

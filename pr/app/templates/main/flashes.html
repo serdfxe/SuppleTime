@@ -7,20 +7,38 @@
                         {{ message }}
                     </h1>
 
-                    <h2>
+                    <!-- <h2>
                         {{ {"message": "!", "error": "×", "success": "☑"}[category] }}
-                    </h2>
+                    </h2> -->
                 </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
 </div>
 <script>
-    var del_mes = setInterval(function(){
-        if (document.getElementById("messages").children.length) {
-            document.getElementById("messages").children[0].remove()
-        } else {
-            clearInterval(del_mes)
+    let mess = document.getElementById("messages");
+    let c = mess.children;
+    let done = false;
+    var show = setInterval(function () {
+        mess = document.getElementById("messages");
+        c = mess.children;
+        if (c.length != 0) {
+            for (let i = 0; i < c.length; i ++) {
+                c[i].style.marginTop = "0px";
+            }
+            mess.style.marginTop = "0px";
+            setTimeout(() => {
+                done = true;
+            }, 1000); 
         }
-        }, 2000);
+    }, 100)
+    
+    var del_mes = setInterval(function(){
+        if (document.getElementById("messages").children.length && done) {
+            document.getElementById("messages").children[0].remove()
+        }
+        if (!document.getElementById("messages").children.length && done) {
+            done = false;
+        }
+    }, 3000);
 </script>
