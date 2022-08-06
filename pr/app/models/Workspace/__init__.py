@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, UniqueConstraint, DateTime, Boolean, BigInteger
+from sqlalchemy import Column, String, Integer, ForeignKey, UniqueConstraint, DateTime, Boolean, BigInteger, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
 
 from SuppleTime.pr.app.database import Base
@@ -63,8 +63,10 @@ class Trackers(Base):
     
 class Trackers_tags(Base):
     __tablename__ = "trackers_tags"
-    
-    user_id = Column(Integer, ForeignKey(User.id), primary_key = True, unique = True)
+
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey(User.id))
     tag_id = Column(BigInteger, ForeignKey("tags.id"))
 
     tags = relationship("Tags")

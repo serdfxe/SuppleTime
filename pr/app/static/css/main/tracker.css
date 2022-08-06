@@ -179,6 +179,11 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     margin-right: 17px;
 }
 
+.header .tracker_tags {
+    display: flex;
+    align-items: center;
+}
+
 .header .right-side .doublebuttonsback {
     display: flex;
     flex-direction: column;
@@ -390,6 +395,7 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
 .tag-search-content {
     margin-top: 10px;
     padding: 15 15 15 15;
+    width: 225px;
     display: none;
     position: absolute;
     /* width: 300px;
@@ -432,6 +438,8 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     margin-top: 15px;
     text-align: center;
     font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .create-tag-btn {
@@ -564,8 +572,9 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     align-items: center;
 }
 
-.task_and_tags .tags .tag {
+.tag {
     height: 32px;
+    width: fit-content;
     border-radius: 8px;
     margin-left: 9px;
     padding: 0 9px 0 9px;
@@ -574,11 +583,28 @@ input:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.15s ea
     align-items: center;
 }
 
-.task_and_tags .tags .tag h1{
+.tag-search-results .tag {
+    cursor: pointer;
+}
+
+.tag-search-results>* {
+    margin-top: 10px;
+}
+
+.tracker_tags .tag {
+    cursor: pointer;
+}
+
+.tracker_tags .tag:hover {
+    background: var(--eror-color);
+}
+
+.tag h1{
     color: var(--h1);
     line-height: 18px;
     font-size: 15px;
     text-align: center;
+    font-weight: 300;
 }
 
 .task_and_tags .tags svg {

@@ -71,7 +71,7 @@
                             <input type="text">
                             <svg style="width: 30px; height: 30px;" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/></svg>
                         </div>
-                        <div class="tag-search-results">
+                        <div class="tag-search-results" id="tag-search-results">
                             Ничего не найдено
                         </div>
                         <div class="create-tag-btn">
@@ -244,26 +244,30 @@
 
             tag_sample = document.getElementById("tag_sample")
 
-            for (let i = 0; i < tags_div.children; i++) {
-                tags_div.children[i].remove()
+
+            while (tags_div.children.length) {
+                tags_div.children[0].remove()
             }
 
-            for (let i = 0; i < tags; i++) {
+            for (let i = 0; i < tags.length; i++) {
                 let tag = tag_sample.content.cloneNode(true);
+
+                tag = tag.querySelector("div")
+
+                tags_div.appendChild(tag)
 
                 tag.style.background = "rgb("+ tags[i]["color"].join(", ") +")"
                 tag.children[0].textContent = tags[i]["name"];
 
-                tags_div.appendChild(tag)
+                tag.addEventListener("click", function () {
+                    post("/app/tracker/delete_tracker_tag", [["id", tags[i].id]]);
+                })
             }
-
-            console.log(bill)
 
             billable[0].style.color = "var(--complement-color)"
             billable[1].style.color = "var(--complement-color)"
 
             if (!bill) {
-                console.log("!bill")
                 billable[0].style.color = "var(--h2)"
                 billable[1].style.color = "var(--h2)"
             }

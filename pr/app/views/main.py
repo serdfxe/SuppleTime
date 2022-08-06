@@ -182,14 +182,30 @@ def tag_search_handler(data):
 @tracker_decorator
 def add_tracker_tag_route():
     data = request.form
-    tag_id = data.get("tag_id")
+    tag_id = data.get("id")
     user_id = current_user.id
 
     mess = add_tag_to_tracker(user_id, tag_id)
 
-    if not mess: flash("Error", "error")
+    if not mess: flash(f"{user_id} {tag_id}", "error")
 
     return ""
+
+
+@main.post("/tracker/delete_tracker_tag")
+@login_required
+@tracker_decorator
+def delete_tracker_tag_route():
+    data = request.form
+    tag_id = data.get("id")
+    user_id = current_user.id
+
+    mess = delete_tracker_tag(user_id, tag_id)
+
+    if not mess: flash(f"{user_id} {tag_id}", "error")
+
+    return ""
+
 
 @main.route("/account", methods=("GET", "POST"))
 @login_required

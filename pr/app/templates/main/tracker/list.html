@@ -84,7 +84,6 @@
                 drop_cont.style.display = "flex";
 
                 socket.emit("tag_search", {"request": "yeees"})
-                console.log("search!")
 
                 drop_cont.onmouseout = function () {
                     window.onclick = exit(drop_cont)
@@ -113,6 +112,28 @@
 
         socket.on('tag_search', function(data){
             console.log(data);
+
+            tags_div = document.getElementById("tag-search-results")
+            tags_div.textContent = ''
+
+            while (tags_div.children.length) {
+                tags_div.children[0].remove()
+            }
+
+            tag_sample = document.getElementById("tag_sample")
+
+            for (let i = 0; i < data.length; i++) {
+                let tag = tag_sample.content.cloneNode(true);
+                tag = tag.querySelector("div")
+
+                tags_div.appendChild(tag)
+
+                tag.style.background = "rgb("+ data[i]["color"].join(", ") +")"
+                tag.children[0].textContent = data[i]["name"];
+                tag.addEventListener("click", function () {
+                    post("/app/tracker/add_tracker_tag", [["id", data[i].id]]);
+                })
+            }
         });
     </script>
 </div>

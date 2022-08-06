@@ -92,8 +92,24 @@ def add_tag_to_tracker(user_id: int, tag_id: int, uow: UnitOfWork = Provide[Cont
         tag = rep.query(Tags).filter_by(id=tag_id).first()
         if not tag: return False
 
+        if rep.query(Trackers_tags).filter_by(tag_id=tag.id, user_id=user_id).first(): return True
         member = Trackers_tags(user_id=user_id, tag_id=tag.id)
         uow.repository.save(member)
+
+        uow.commit()
+
+        return True
+
+
+@inject
+def delete_tracker_tag(user_id: int, tag_id: int, uow: UnitOfWork = Provide[Container.user_uow]) -> bool:
+    with uow:
+        rep = uow.repository.session
+
+        tag = rep.query(Tags).filter_by(id=tag_id).first()
+        if not tag: return False
+
+        member = rep.query(Trackers_tags).filter_by(tag_id=tag.id, user_id=user_id).delete()
 
         uow.commit()
 
@@ -105,7 +121,7 @@ def get_all_trackers_tags(user_id: int, repository: Repository = Provide[Contain
     rep = repository.session
     l = rep.query(Trackers_tags).filter_by(user_id=user_id).all()
 
-    return [{"name": i.tags.name, "color": [int(j) for j in i.tags.color.split(" ")]} for i in l] 
+    return [{"name": i.tags.name, "color": [int(j) for j in i.tags.color.split(" ")], "id": i.tag_id} for i in l] 
 
 
 @inject
@@ -113,7 +129,7 @@ def get_all_ws_tags(workspace_id: int, repository: Repository = Provide[Containe
     rep = repository.session
     l = rep.query(Tags).filter_by(workspace_id=workspace_id).all()
 
-    return [{"name": i.name, "color": [int(j) for j in i.color.split(" ")]} for i in l] 
+    return [{"name": i.name, "color": [int(j) for j in i.color.split(" ")], "id": i.id} for i in l] 
 
 
 def get_all_users_tags(user_id: int):
